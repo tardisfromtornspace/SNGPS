@@ -1,0 +1,16 @@
+package LaPrac;
+
+import java.util.EventListener;
+import 
+
+public class prueba {
+	
+	public prueba() {
+		EventListener cosa = new EventListener();
+	}
+	// TO-DO AÑADIR PATRON OBSERVER
+	
+	public static void main() {
+		
+	}
+}
