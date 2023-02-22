@@ -12,7 +12,7 @@ public class prueba {
 	// TO-DO AÑADIR PATRON OBSERVER al puerto serie, además hacer esto bien con Maven quizá
 	
 	public static void main() {
-		SerialPort comPort = SerialPort.getCommPorts()[0]; // TO-DO ver si es el 3?
+		SerialPort comPort = SerialPort.getCommPorts()[0];
 		comPort.openPort();
 		comPort.addDataListener(new SerialPortDataListener() {
 		   @Override
