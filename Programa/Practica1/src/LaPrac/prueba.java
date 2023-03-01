@@ -6,34 +6,12 @@ import java.util.EventListener;
 import com.fazecast.jSerialComm.*;
 
 public class prueba {
-	
-	public prueba() {
-		//EventListener cosa = new EventListener();
-	}
 	// TO-DO AÑADIR PATRON OBSERVER al puerto serie, además hacer esto bien con Maven quizá
 	
-	public static void main() {
+	public static void main(String[] args) {
 		Subject losPuertos = new Subject();
 		Observer calculadora = new Observer(losPuertos, 30, "Europeo");
-		losPuertos.start(); // Ver si esto ocasiona problemas
-		// Lo de abajo o arriba?
-		SerialPort[] comPorts = SerialPort.getCommPorts(); // TO-DO ver si es el 3?
-		// Buscar el que sea COM3
-		SerialPort comPort = SerialPort.getCommPorts()[0];
-		comPort.openPort();
-		comPort.addDataListener(new SerialPortDataListener() {
-		   @Override
-		   public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_RECEIVED; }
-		   @Override
-		   public void serialEvent(SerialPortEvent event)
-		   {
-		      byte[] newData = event.getReceivedData();
-		      System.out.println("Received data of size: " + newData.length);
-		      for (int i = 0; i < newData.length; ++i)
-		         System.out.print((char)newData[i]);
-		      System.out.println("\n");
-		   }
-		});
+		losPuertos.start(); // Ver si esto ocasiona problema
 		
 	}
 }

@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Objects;
 
-public class Subject implements IObservable {
+import com.fazecast.jSerialComm.SerialPort;
+import com.fazecast.jSerialComm.SerialPortDataListener;
+import com.fazecast.jSerialComm.SerialPortEvent;
+
+public class Subject implements IObservable, Runnable{
 	private ArrayList<IObserver> observers;
 	public Subject() {
 		this.observers = new ArrayList<IObserver>();
@@ -34,19 +38,61 @@ public class Subject implements IObservable {
 	}
 	
 	public void start() {
-		Thread hilo = new Thread((Runnable) this);
+		Thread hilo = new Thread(this);
 		hilo.start();
 	}
 	
 	public void leerPuertos() {
+		SerialPort[] comPorts = SerialPort.getCommPorts(); // TO-DO ver si es el 3?
+		for (SerialPort s: comPorts) {
+			System.out.println("Puerto disponible: " + s);
+			// TO-DO verificar que es el del GPS
+		}
+		
+		// Suponemos que solo hay uno y es el primero
+		SerialPort comPort = SerialPort.getCommPorts()[0];
+		System.out.println("Puerto usado: " + comPort);
+		comPort.openPort();
+		comPort.setParity(0);
+		comPort.setBaudRate(4800);
+		comPort.setNumStopBits(SerialPort.ONE_STOP_BIT);
+		System.out.println("Puerto abierto: "+ comPort.isOpen());
+		
+		MessageListener listener = new MessageListener();
+		comPort.addDataListener(listener);
+		
+		
+		
+		
+		/*comPort.addDataListener(
+				
+				new SerialPortDataListener() {
+		   @Override
+		   public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_RECEIVED; } // LISTENING_EVENT_DATA_RECEIVED; // LISTENING_EVENT_DATA_AVAILABLE
+		   
+		   //@Override
+		   //public byte[] getMessageDelimiter() { return new byte[] { (byte) '\r', (byte) '\n' }; } // 0x0D 0X0A
+		   
+		   @Override
+		   public void serialEvent(SerialPortEvent event)
+		   {
+			  byte[] newData = event.getReceivedData();
+		      //byte[] newData = new byte[comPort.bytesAvailable()]; //event.getReceivedData();
+		      //int numRead = comPort.readBytes(newData, newData.length);
+		      //System.out.println("Read " + numRead + " bytes.");
+		      
+		      //System.out.println("Received data of size: " + newData.length);
+		      for (int i = 0; i < newData.length; ++i)
+		         System.out.print((char)newData[i]);
+		      //System.out.println("\n");
+		   }
+		});*/
 		
 	}
 	
 	public void run() {
 		synchronized (this) {
-			while (true) {
-				// Leer puerto COM?
-			}
+			leerPuertos();
 		}
 	}
 
