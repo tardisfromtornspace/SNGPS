@@ -1,0 +1,12 @@
+package LaPrac;
+
+public class Observer implements IObserver {
+	Subject miSujeto;
+	public Observer(Subject miSujeto) {
+		this.miSujeto = miSujeto;
+	}
+	public void actualizar() {
+		
+	}
+
+}

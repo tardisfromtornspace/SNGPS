@@ -1,0 +1,14 @@
+package LaPrac;
+
+import java.util.ArrayList;
+
+public class Subject {
+	private ArrayList[] list;
+	public void Subject() {
+		this.observers = new ArrayList[]
+	}
+	public void notifyObservers() {
+		
+	}
+
+}

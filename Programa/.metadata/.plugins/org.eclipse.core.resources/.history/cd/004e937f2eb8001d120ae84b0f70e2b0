@@ -1,0 +1,20 @@
+package LaPrac;
+
+public class Observer implements IObserver {
+	IObservable miSujeto;
+	public static double aEuropeo = 6378388.0;
+	public static double aWGS84 = 6378137.0;
+	
+	public Observer(IObservable miSujeto) {
+		this.miSujeto = miSujeto;
+		this.miSujeto.addObserver(this);
+	}
+	public void actualizar() {
+		// Tomo el dato, y lo parseo
+		// Luego ajusto con fórmulas
+		double longitud = 0.0; // TO-DO
+		double latitud = 0.0;  // TO-DO
+		
+	}
+
+}

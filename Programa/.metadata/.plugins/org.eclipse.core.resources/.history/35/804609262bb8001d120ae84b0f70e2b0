@@ -1,0 +1,37 @@
+package LaPrac;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class Subject {
+	private ArrayList<IObserver> observers;
+	public Subject() {
+		this.observers = new ArrayList<IObserver>();
+	}
+	
+	public ArrayList<IObserver> getObservers() {
+		return observers;
+	}
+	public void setObservers(ArrayList<IObserver> observers) {
+		this.observers = observers;
+	}
+	
+	public void addObserver(IObserver observador) {
+		this.observers.add(observador);
+	}
+	public void removeObserver(IObserver observador) {
+		this.observers.remove(observador);
+	}
+	public void notifyObservers() {
+		for (Iterator<IObserver> it = observers.iterator(); it.hasNext();) {
+			IObserver iObserver = it.next();
+			iObserver.actualizar();
+		}
+	}
+	
+	public void start() {
+		Thread hilo = new Thread((Runnable) this);
+		hilo.start();
+	}
+
+}

@@ -1,0 +1,20 @@
+package LaPrac;
+
+import java.util.ArrayList;
+
+public class Subject {
+	private ArrayList<Observer> observers;
+	public void Subject() {
+		this.observers = new ArrayList();
+	}
+	public void addObserver(Observer observador) {
+		this.observers.add(observador);
+	}
+	public void removeObserver(Observer observador) {
+		this.observers.remove(observador);
+	}
+	public void notifyObservers() {
+		
+	}
+
+}

@@ -1,0 +1,67 @@
+package LaPrac;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Objects;
+
+public class Subject implements IObservable {
+	private ArrayList<IObserver> observers;
+	public Subject() {
+		this.observers = new ArrayList<IObserver>();
+	}
+	
+	public ArrayList<IObserver> getObservers() {
+		return observers;
+	}
+	public void setObservers(ArrayList<IObserver> observers) {
+		this.observers = observers;
+	}
+	
+	@Override
+	public void addObserver(IObserver observador) {
+		this.observers.add(observador);
+	}
+	@Override
+	public void removeObserver(IObserver observador) {
+		this.observers.remove(observador);
+	}
+	@Override
+	public void notifyObservers() {
+		for (Iterator<IObserver> it = observers.iterator(); it.hasNext();) {
+			IObserver iObserver = it.next();
+			iObserver.actualizar();
+		}
+	}
+	
+	public void start() {
+		Thread hilo = new Thread((Runnable) this);
+		hilo.start();
+	}
+	
+	public void leerPuertos() {
+		
+	}
+
+	@Override
+	public String toString() {
+		return "Subject [observers=" + observers + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(observers);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Subject other = (Subject) obj;
+		return Objects.equals(observers, other.observers);
+	}
+
+}

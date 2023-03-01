@@ -1,6 +1,7 @@
 package LaPrac;
 
 import java.util.EventListener;
+
 // TO-DO añadir el plugin de lectura de COM
 import com.fazecast.jSerialComm.*;
 
@@ -12,7 +13,13 @@ public class prueba {
 	// TO-DO AÑADIR PATRON OBSERVER al puerto serie, además hacer esto bien con Maven quizá
 	
 	public static void main() {
-		SerialPort comPort = SerialPort.getCommPorts()[0]; // TO-DO ver si es el 3?
+		Subject losPuertos = new Subject();
+		Observer calculadora = new Observer(losPuertos, 30, "Europeo");
+		losPuertos.start(); // Ver si esto ocasiona problemas
+		// Lo de abajo o arriba?
+		SerialPort[] comPorts = SerialPort.getCommPorts(); // TO-DO ver si es el 3?
+		// Buscar el que sea COM3
+		SerialPort comPort = SerialPort.getCommPorts()[3];
 		comPort.openPort();
 		comPort.addDataListener(new SerialPortDataListener() {
 		   @Override
@@ -27,6 +34,7 @@ public class prueba {
 		      System.out.println("\n");
 		   }
 		});
+		
 	}
 }
 

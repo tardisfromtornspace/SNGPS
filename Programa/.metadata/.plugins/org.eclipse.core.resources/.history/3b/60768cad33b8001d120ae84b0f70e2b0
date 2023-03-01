@@ -1,0 +1,69 @@
+package LaPrac;
+
+public class Observer implements IObserver {
+	IObservable miSujeto;
+	public static double aEuropeo  = 6378388.0;
+	public static double aWGS84    = 6378137.0;
+	
+	public static double fEuropeo  = 1.0/297.0;
+	public static double fWGS84    = 1.0/298.25722;
+	
+	public static double e2Europeo = 0.00672267;
+	public static double e2WGS84   = 0.00669437999013;
+	
+	public static double cEuropeo  = 6399936.608;
+	public static double cWGS84    = 6399593.626;
+	
+	private double a;
+	private double f;
+	private double b;
+	private double e2;
+	private double radioPolarb;
+	private int huso;
+	private double signoLongitud = 0.0; // -1 W, +1 E
+	private double lambda0 = 0.0;
+	private double lambda0rad = 0.0;
+	
+	public Observer(IObservable miSujeto, int huso, String tipo) {
+		this.miSujeto = miSujeto;
+		if (tipo.equalsIgnoreCase("Europeo")) {
+			calculosIniciales(aEuropeo, fEuropeo, e2Europeo, huso);
+		} else {
+			calculosIniciales(aWGS84, fWGS84, e2WGS84, huso);
+		}
+		this.miSujeto.addObserver(this);
+	}
+	
+	public void calculosIniciales(double a, double f, double e2, int huso) {
+		this.a = a;
+		this.b = a * (1 -f);
+		this.f = f;
+		this.e2 = e2;
+		this.huso = huso;
+		this.lambda0 =
+	}
+	
+	public double calcularf(double a, double b) {
+		double f =  (a - b)/ a;
+		return f;
+	}
+	
+	public double calculare2(double a, double b) {
+		double e2 = Math.pow(a, 2) - Math.pow(b, 2)/Math.pow(b, 2);
+		return e2;
+	}
+	
+	public double calcularc(double a, double b) {
+		double c = Math.pow(a, 2) / b;
+		return c;
+	}
+	
+	public void actualizar() {
+		// Tomo el dato, y lo parseo
+		// Luego ajusto con fórmulas
+		double longitud = 0.0; // TO-DO
+		double latitud = 0.0;  // TO-DO
+		
+	}
+
+}
