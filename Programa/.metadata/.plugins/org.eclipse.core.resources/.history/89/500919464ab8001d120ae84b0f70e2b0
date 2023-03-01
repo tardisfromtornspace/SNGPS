@@ -101,23 +101,6 @@ public class Observer implements IObserver {
 		return elUMT_Norting;
 	}
 	
-	public double calcularRho (double a, double e2, double phi) {
-		double N = a * (1 - e2) / Math.cbrt(1 - e2 * Math.pow(Math.sin(phi), 2));
-		return N;
-	}
-	
-	public double[] deWGS84aED50(double lambda, double phi, double e2, double a) {
-		// TO-DO preguntar el profe sobre esto
-		double N = calcularN(a, e2, phi);
-		double rho = calcularRho(a, e2, phi);
-		double dX = 0.0, dY = 0.0, dZ = 0.0; // TO-DO desplazamientos de las elipsoides consultar con profesor
-		double da = Observer.aEuropeo - Observer.aWGS84, df = Observer.fEuropeo - Observer.fWGS84; // Variacion en el semieje mayor y aplanamiento de las elipsoides TO-DO consultar con profe
-		double dPhi = (-dX * Math.sin(phi)*Math.cos(lambda) - dY * Math.sin(phi)*Math.cos(lambda) + dZ * Math.cos(phi) + (a * df + f *da) * Math.sin(2 * phi))/(rho * Math.sin(1));
-		double dLambda = (-dX * Math.sin(lambda) + dY * Math.cos(lambda))/(N * Math.cos(phi)*Math.cos(1));
-		// TO-DO , todos esos cos(1) y sin(1) son 1'', 1 segundo de arco TO-DO revisar
-		return new double[] {dPhi, dLambda};
-	} 
-	
 	public double[] calculosSiguientes(double longitud, double latitud, double altura, String oesteEste, String norteSur, int huso) {
 		
 		double latitudphi     = ( oesteEste.equalsIgnoreCase("W") ? -1 : 1 ) * gradaRadianes(latitud);
@@ -131,12 +114,10 @@ public class Observer implements IObserver {
 		double C = calcularC(this.e, lambda0rad);
 		double A = calcularA(longitudlambda, lambda0rad, latitudphi); // phi es latitud, lambda es longitud
 		double laM = calcularM(this.a, this.e2, latitudphi) ;
-		double elUTM_Easting = calcularUMT_Easting(N, A, T, C, this.e2);
-		double elUTM_Norting = calcularUTM_Norting(laM, N, A, T, C, this.e2, latitudphi);
-		// TO-DO preguntar al profe si debemos hacer esto también Y PASARLO A EUROPEAS
-		double[] ajusteaEuropeo = deWGS84aED50(longitud, latitud, this.e2, this.a);
+		double elUMT_Easting = calcularUMT_Easting(N, A, T, C, this.e2);
+		double elUMT_Norting = calcularUTM_Norting(laM, N, A, T, C, this.e2, latitudphi);
 		
-		double[] result = new double[] {elUTM_Easting, elUTM_Norting};
+		double[] result = new double[] {elUMT_Easting, elUMT_Norting};
 		return result;
 	}
 	
@@ -155,12 +136,8 @@ public class Observer implements IObserver {
 	public void actualizar() {
 		// Tomo el dato, y lo parseo
 		// Luego ajusto con fórmulas
-		String cadena = ""; // miSujeto.getMensaje(); // Esto se ajustaría a lo sacado del Subject
-		System.out.println("Cadena GPS: " + cadena);
 		
-		// Acá queda bien filtrarlo, separarlos por comas, solo nos interesan tramas $GPGGA de momento
-		
-		// De lo filtrado sacamos esto
+		System.out.println("Cadena GPS");
 		String oesteEste = "";
 		String norteSur = "";
 		
@@ -170,9 +147,7 @@ public class Observer implements IObserver {
 		double altura = 0.0; // TO-DO
 		int huso = 30; // TO-DO calcular con hora UTC
 		
-		double[] resultado = calculosSiguientes(longitud, latitud, altura, oesteEste, norteSur, huso);
-		
-		System.out.println("UTM Norte: " + resultado[1] + "UTM Este: " + resultado[0]);
+		calculosSiguientes(longitud, latitud, altura, oesteEste, norteSur, huso);
 		
 		
 		

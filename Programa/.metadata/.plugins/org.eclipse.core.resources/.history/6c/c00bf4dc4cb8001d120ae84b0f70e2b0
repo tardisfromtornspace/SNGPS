@@ -26,5 +26,6 @@ public final class MessageListener implements SerialPortMessageListener
 	         System.out.print((char)delimitedMessage[i]);
 	         mensaje.append(Character.toString((char)delimitedMessage[i]));
       }
+
    }
 }

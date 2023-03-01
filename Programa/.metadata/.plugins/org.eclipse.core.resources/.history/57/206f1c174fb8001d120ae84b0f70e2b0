@@ -133,8 +133,6 @@ public class Observer implements IObserver {
 		double laM = calcularM(this.a, this.e2, latitudphi) ;
 		double elUTM_Easting = calcularUMT_Easting(N, A, T, C, this.e2);
 		double elUTM_Norting = calcularUTM_Norting(laM, N, A, T, C, this.e2, latitudphi);
-		// TO-DO preguntar al profe si debemos hacer esto también Y PASARLO A EUROPEAS
-		double[] ajusteaEuropeo = deWGS84aED50(longitud, latitud, this.e2, this.a);
 		
 		double[] result = new double[] {elUTM_Easting, elUTM_Norting};
 		return result;
