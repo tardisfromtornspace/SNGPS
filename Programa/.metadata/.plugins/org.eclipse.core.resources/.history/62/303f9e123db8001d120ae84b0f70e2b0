@@ -19,7 +19,7 @@ public class prueba {
 		// Lo de abajo o arriba?
 		SerialPort[] comPorts = SerialPort.getCommPorts(); // TO-DO ver si es el 3?
 		// Buscar el que sea COM3
-		SerialPort comPort = SerialPort.getCommPorts()[0];
+		SerialPort comPort = SerialPort.getCommPorts()[3];
 		comPort.openPort();
 		comPort.addDataListener(new SerialPortDataListener() {
 		   @Override
