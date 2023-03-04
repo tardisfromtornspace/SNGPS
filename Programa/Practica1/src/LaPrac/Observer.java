@@ -1,5 +1,7 @@
 package LaPrac;
 
+import java.util.ArrayList;
+
 public class Observer implements IObserver {
 	IObservable miSujeto;
 	public static double aEuropeo  = 6378388.0;
@@ -133,7 +135,7 @@ public class Observer implements IObserver {
 		double laM = calcularM(this.a, this.e2, latitudphi) ;
 		double elUTM_Easting = calcularUMT_Easting(N, A, T, C, this.e2);
 		double elUTM_Norting = calcularUTM_Norting(laM, N, A, T, C, this.e2, latitudphi);
-		// TO-DO preguntar al profe si debemos hacer esto también Y PASARLO A EUROPEAS
+		// TO-DO preguntar al profe si debemos hacer esto tambiï¿½n Y PASARLO A EUROPEAS
 		double[] ajusteaEuropeo = deWGS84aED50(longitud, latitud, this.e2, this.a);
 		
 		double[] result = new double[] {elUTM_Easting, elUTM_Norting};
@@ -141,41 +143,59 @@ public class Observer implements IObserver {
 	}
 	
 	public double longitudaGrados(double valor) {
-		double grados = Math.floor(valor/100);
+		double grados = Math.floor(valor/100.d);
 		double minutos = valor - grados * 100;
-		return grados + minutos/60.0;
+		return valor + minutos/60.0;
 	}
 	
 	public double latitudaGrados(double valor) {
-		double grados = Math.floor(valor/100);
+		double grados = Math.floor(valor/100.d);
 		double minutos = valor - grados * 100;
-		return grados + minutos/60.0;
+		return valor + minutos/60.0;
 	}
-	
+	private ArrayList<String> getParsedStringArrayList(String cadena, char delimitador)
+	{
+		ArrayList<String> parseado = new ArrayList<>();
+		StringBuilder n = new StringBuilder();
+		for(char i:cadena.toCharArray()) {
+			if(i == delimitador) {
+				parseado.add(n.toString());
+				n = new StringBuilder();
+			} else {
+				n.append(i);
+			}
+		}
+			
+		return parseado;
+	}
 	public void actualizar() {
 		// Tomo el dato, y lo parseo
-		// Luego ajusto con fórmulas
-		String cadena = ""; // miSujeto.getMensaje(); // Esto se ajustaría a lo sacado del Subject
-		System.out.println("Cadena GPS: " + cadena);
+		// Luego ajusto con fï¿½rmulas
+		String cadena = miSujeto.getNotifyMessage();
+		ArrayList<String> parseada = getParsedStringArrayList(cadena, ',');
+		for(int i = 0; i < parseada.size(); i++) {
+			// Por ahora unicamente tramas GPGGA
+			if(!parseada.get(i).equals("$GPGGA") && (i == 0))
+				return;
+		}
 		
-		// Acá queda bien filtrarlo, separarlos por comas, solo nos interesan tramas $GPGGA de momento
+		System.out.print("Entrada GPS (Solo tratar GPGGA):\n"+ miSujeto.getNotifyMessage());
+		System.out.println("Campos parseo :"+ parseada);
+		// Acï¿½ queda bien filtrarlo, separarlos por comas, solo nos interesan tramas $GPGGA de momento
 		
 		// De lo filtrado sacamos esto
-		String oesteEste = "";
-		String norteSur = "";
-		
-		
-		double longitud = longitudaGrados(0.0); // TO-DO
-		double latitud = latitudaGrados(0.0);  // TO-DO
-		double altura = 0.0; // TO-DO
+		// Ej. $GPGGA,092831.567,4023.413,N,00337.529,W,1,12,1.0,0.0,M,0.0,M,,*7
+		//     [ 0   ,     1    ,   [2] ,[3],   [4] ,[5],6, 7, 8,[9],A, B ,C,D,E]
+		String oesteEste = parseada.get(5);
+		String norteSur = parseada.get(3);
+		double longitud = longitudaGrados(Double.parseDouble(parseada.get(4)));
+		double latitud = latitudaGrados(Double.parseDouble(parseada.get(2)));
+		double altura = Double.parseDouble(parseada.get(9));
 		int huso = 30; // TO-DO calcular con hora UTC
 		
 		double[] resultado = calculosSiguientes(longitud, latitud, altura, oesteEste, norteSur, huso);
 		
-		System.out.println("UTM Norte: " + resultado[1] + "UTM Este: " + resultado[0]);
-		
-		
-		
+		System.out.println("UTM Norte: " + resultado[1] + "\nUTM Este: " + resultado[0] +"\n");
 	}
 
 }

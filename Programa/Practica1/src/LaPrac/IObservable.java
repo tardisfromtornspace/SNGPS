@@ -6,6 +6,9 @@ public interface IObservable {
 
 	void removeObserver(IObserver observador);
 
-	void notifyObservers();
+	void notifyObservers(int notifyObject);
+
+	void setNotifyMessage(String mensaje);
+	String getNotifyMessage();
 
 }
