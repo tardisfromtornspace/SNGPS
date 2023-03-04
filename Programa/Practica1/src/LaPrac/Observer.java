@@ -145,13 +145,13 @@ public class Observer implements IObserver {
 	public double longitudaGrados(double valor) {
 		double grados = Math.floor(valor/100.d);
 		double minutos = valor - grados * 100;
-		return valor + minutos/60.0;
+		return grados + minutos/60.0;
 	}
 	
 	public double latitudaGrados(double valor) {
 		double grados = Math.floor(valor/100.d);
 		double minutos = valor - grados * 100;
-		return valor + minutos/60.0;
+		return grados + minutos/60.0;
 	}
 	private ArrayList<String> getParsedStringArrayList(String cadena, char delimitador)
 	{
