@@ -55,25 +55,39 @@ public class Subject implements IObservable, Runnable {
 	}
 	
 	public void mainActivity() {
-		//SerialPort comPorts = SerialPort.getCommPort("/dev/pts/9"); // TO-DO ver si es el 3?
-		/*System.out.println(SerialPort.getCommPorts().length);
+		/*//SerialPort comPorts = SerialPort.getCommPort("/s()dev/pts/9"); // TO-DO ver si es el 3?
+		System.out.println(SerialPort.getCommPorts().length);
 		for (SerialPort s: comPorts) {
 			System.out.println("Puerto disponible: " + s);
 			// TO-DO verificar que es el del GPS
-		}*/
+		}
 		
 		// Suponemos que solo hay uno y es el primero
 		
-		SerialPort comPort = SerialPort.getCommPort("/dev/pts/7");
-		/*if(SerialPort.getCommPorts().length != 0) {
+		//SerialPort comPort = SerialPort.getCommPort("/dev/pts/6");
+		if(SerialPort.getCommPorts().length != 0) {
 			comPort = SerialPort.getCommPorts()[0];*/
+			//
+			
+			SerialPort[] comPorts = SerialPort.getCommPorts(); // TO-DO ver si es el 3?
+			for (SerialPort s: comPorts) {
+				System.out.println("Puerto disponible: " + s);
+				// TO-DO verificar que es el del GPS
+			}
+			
+			// Suponemos que solo hay uno y es el primero
+			SerialPort comPort = SerialPort.getCommPorts()[0];
+			System.out.println("Puerto usado: " + comPort);
+			//
+			
 		System.out.println("Puerto usado: " + comPort);
 		comPort.openPort();
 		comPort.setParity(0);
 		comPort.setBaudRate(4800);
 		comPort.setNumStopBits(SerialPort.ONE_STOP_BIT);
 
-		System.out.println("Puerto abierto: "+ comPort.isOpen());
+		System.out.println("Puerto ab ierto: "+ comPort.isOpen());
+		
 		comPort.addDataListener(listener);
 	}
 	
@@ -92,7 +106,7 @@ public class Subject implements IObservable, Runnable {
 	public int hashCode() {
 		return Objects.hash(observers);
 	}
-
+//f
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

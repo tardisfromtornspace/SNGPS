@@ -18,6 +18,6 @@ public class MessageListener implements SerialPortMessageListener
 
    public void serialEvent(SerialPortEvent event)
    {
-	   // TO BE OVERRIDEN
+	   // TO BE OVERRIDENA
    }
 }

@@ -20,7 +20,7 @@ public class prueba {
 			      
 			      instance.setNotifyMessage(mensajeSerie.toString());
 			      // El identificador de la razon u objeto de la llamada a actualizacion esta notificado cuando tiene lugar el evento
-			      // en este caso por ej. 0x1 sera llamada por recepcion de trama, en otro caso se descarta dicha llamada
+			      // en este caso por ej. 0x1 sera llamada por recepcion de trama, en otro caso se descarta dicha llamadas
 			      instance.notifyObservers(1);
 			   }
 		};

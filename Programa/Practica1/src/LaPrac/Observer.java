@@ -1,6 +1,7 @@
 package LaPrac;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Observer implements IObserver {
 	IObservable miSujeto;
@@ -155,30 +156,18 @@ public class Observer implements IObserver {
 	}
 	private ArrayList<String> getParsedStringArrayList(String cadena, char delimitador)
 	{
-		ArrayList<String> parseado = new ArrayList<>();
-		StringBuilder n = new StringBuilder();
-		for(char i:cadena.toCharArray()) {
-			if(i == delimitador) {
-				parseado.add(n.toString());
-				n = new StringBuilder();
-			} else {
-				n.append(i);
-			}
-		}
-			
+		ArrayList<String> parseado = new ArrayList<>(Arrays.asList(cadena.split(",")));
+		parseado.set(parseado.size()-1, parseado.get(parseado.size()-1).split("\r")[0]);
+
 		return parseado;
 	}
 	public void actualizar() {
 		// Tomo el dato, y lo parseo
-		// Luego ajusto con f�rmulas
+		// Luego ajusto con f�rmulass
 		String cadena = miSujeto.getNotifyMessage();
 		ArrayList<String> parseada = getParsedStringArrayList(cadena, ',');
-		for(int i = 0; i < parseada.size(); i++) {
-			// Por ahora unicamente tramas GPGGA
-			if(!parseada.get(i).equals("$GPGGA") && (i == 0))
-				return;
-		}
-		
+		if(!parseada.get(0).equals("$GPGGA") || parseada.size() != 15)
+			return;
 		System.out.print("Entrada GPS (Solo tratar GPGGA):\n"+ miSujeto.getNotifyMessage());
 		System.out.println("Campos parseo :"+ parseada);
 		// Ac� queda bien filtrarlo, separarlos por comas, solo nos interesan tramas $GPGGA de momento

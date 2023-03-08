@@ -14,7 +14,7 @@ public class Etc {
 		   comPort.addDataListener(listener);
 		   try { Thread.sleep(5000); } catch (Exception e) { e.printStackTrace(); }
 	   }
-	// Ac� queda bien filtrarlo, separarlos por comas, solo nos interesan tramas $GPGGA de momento
+	// Ac� queda bien filtrarlo, separarlos por comas, solo nos interesan tramas $GPGGA de momentosss
 		
 			// De lo filtrado sacamos esto
 			/*String oesteEste = parseada.get(5);
