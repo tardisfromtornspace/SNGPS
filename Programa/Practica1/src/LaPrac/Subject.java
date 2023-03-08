@@ -10,6 +10,9 @@ import com.fazecast.jSerialComm.SerialPortEvent;
 
 public class Subject implements IObservable, Runnable{
 	private ArrayList<IObserver> observers;
+	private MessageListener listener;
+	private String mensaje = new String();
+
 	public Subject() {
 		this.observers = new ArrayList<IObserver>();
 	}
@@ -37,6 +40,23 @@ public class Subject implements IObservable, Runnable{
 		}
 	}
 	
+	public MessageListener getListener() {
+		return listener;
+	}
+
+	public void setListener(MessageListener listener) {
+		this.listener = listener;
+	}
+	
+	
+	public String getMensaje() {
+		return mensaje;
+	}
+
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
+
 	public void start() {
 		Thread hilo = new Thread(this);
 		hilo.start();
@@ -58,9 +78,34 @@ public class Subject implements IObservable, Runnable{
 		comPort.setNumStopBits(SerialPort.ONE_STOP_BIT);
 		System.out.println("Puerto abierto: "+ comPort.isOpen());
 		
+		Subject cosilla = this;
+		
+        comPort.addDataListener(
+				
+				new MessageListener() {
+
+		   @Override
+		   public void serialEvent(SerialPortEvent event)
+		   {
+		      byte[] delimitedMessage = event.getReceivedData();
+		      
+		      StringBuilder mensaje = new StringBuilder();
+		      
+		      for (int i = 0; i < delimitedMessage.length; ++i) {
+			         System.out.print((char)delimitedMessage[i]);
+			         mensaje.append(Character.toString((char)delimitedMessage[i]));
+		      }
+		      
+		      cosilla.setMensaje(mensaje.toString());
+		      cosilla.notifyObservers();
+		   }
+		});
+		
+		
+		/*
 		MessageListener listener = new MessageListener();
 		comPort.addDataListener(listener);
-		
+		*/
 		
 		
 		

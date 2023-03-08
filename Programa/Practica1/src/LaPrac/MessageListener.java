@@ -4,7 +4,7 @@ import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import com.fazecast.jSerialComm.SerialPortMessageListener;
 
-public final class MessageListener implements SerialPortMessageListener
+public class MessageListener implements SerialPortMessageListener
 {
    @Override
    public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_RECEIVED; }
@@ -27,4 +27,5 @@ public final class MessageListener implements SerialPortMessageListener
 	         mensaje.append(Character.toString((char)delimitedMessage[i]));
       }
    }
+
 }

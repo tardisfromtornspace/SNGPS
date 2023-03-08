@@ -7,5 +7,7 @@ public interface IObservable {
 	void removeObserver(IObserver observador);
 
 	void notifyObservers();
+	
+	public String getMensaje();
 
 }
