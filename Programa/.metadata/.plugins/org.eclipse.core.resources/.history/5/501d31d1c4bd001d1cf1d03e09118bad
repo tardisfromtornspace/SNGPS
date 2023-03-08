@@ -92,7 +92,7 @@ public class Subject implements IObservable, Runnable{
 		      StringBuilder mensaje = new StringBuilder();
 		      
 		      for (int i = 0; i < delimitedMessage.length; ++i) {
-			         //System.out.print((char)delimitedMessage[i]);
+			         System.out.print((char)delimitedMessage[i]);
 			         mensaje.append(Character.toString((char)delimitedMessage[i]));
 		      }
 		      

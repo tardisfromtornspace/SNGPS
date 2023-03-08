@@ -219,7 +219,7 @@ public class Observer implements IObserver {
 		
 		double[] resultado = calculosSiguientes(longitud, latitud, altura, oesteEste, norteSur, huso);
 		
-		System.out.println("UTM Norte: " + resultado[1] + "\nUTM Este : " + resultado[0]);
+		System.out.println("UTM Norte: " + resultado[1] + "UTM Este: " + resultado[0]);
 		
 		
 		
