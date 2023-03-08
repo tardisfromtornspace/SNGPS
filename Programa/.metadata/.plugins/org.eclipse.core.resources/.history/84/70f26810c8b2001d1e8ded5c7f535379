@@ -1,6 +1,0 @@
-package module-info.java;
-import java.util.EventListener;
-
-public class Prueba {
-
-}
