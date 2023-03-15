@@ -1,7 +1,10 @@
 package LaPrac;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
+
+import javax.swing.JFrame;
 
 public class Observer implements IObserver {
 	IObservable miSujeto;
@@ -29,6 +32,20 @@ public class Observer implements IObserver {
 	private double lambda0 = 0.0;
 	private double lambda0rad = 0.0;
 	
+	MyCanvas canvas;
+	
+	
+	boolean primeraVez = true;
+	
+	double coordInicialesEste;
+	double coordInicialesNorte;
+	
+	double coordFinalesEste;
+	double coordFinalesNorte;
+	
+	double diferenciaEste;
+	double diferenciaNorte;
+	
 	public Observer(IObservable miSujeto, int huso, String tipo) {
 		this.miSujeto = miSujeto;
 		if (tipo.equalsIgnoreCase("Europeo")) {
@@ -37,6 +54,18 @@ public class Observer implements IObserver {
 			calculosIniciales(aWGS84, fWGS84, e2WGS84, huso);
 		}
 		this.miSujeto.addObserver(this);
+		this.canvas = new MyCanvas();
+	}
+	
+	public Observer(IObservable miSujeto, int huso, String tipo, MyCanvas canvas) {
+		this.miSujeto = miSujeto;
+		if (tipo.equalsIgnoreCase("Europeo")) {
+			calculosIniciales(aEuropeo, fEuropeo, e2Europeo, huso);
+		} else {
+			calculosIniciales(aWGS84, fWGS84, e2WGS84, huso);
+		}
+		this.miSujeto.addObserver(this);
+		this.canvas = canvas;
 	}
 	
 	public void calculosIniciales(double a, double f, double e2, int huso) {
@@ -216,10 +245,36 @@ public class Observer implements IObserver {
 		    altura = Double.parseDouble(parseada.get(9));
 		
 		int huso = 30; // No hay que complicarse calculando desde la hora UTC, el profe nos ha dicho que podemos hacerlo así
+		this.huso = huso;
 		
 		double[] resultado = calculosSiguientes(longitud, latitud, altura, oesteEste, norteSur, huso);
 		
 		System.out.println("UTM Norte: " + resultado[1] + "\nUTM Este : " + resultado[0]);
+		
+		if (this.primeraVez) {
+			this.primeraVez = false;
+			System.out.println("COORD INICIALES");
+			double[] coordIniciales = this.coordenadasInicialesCanvas(338.067, "W", 4023.550, "N");
+			this.coordInicialesEste = coordIniciales[0];
+			this.coordInicialesNorte = coordIniciales[1];
+			System.out.println("COORD FINALES");
+			double[] coordFinales = this.coordenadasInicialesCanvas(337.300, "W", 4023.033, "N");
+			this.coordFinalesEste = coordFinales[0];
+			this.coordFinalesNorte = coordFinales[1];
+			double[] DifDeInicialAFinal = {coordFinales[0] -coordIniciales[0], -(coordFinales[1] -coordIniciales[1])}; // Este, Norte
+			this.diferenciaEste = DifDeInicialAFinal[0];
+			this.diferenciaNorte = DifDeInicialAFinal[1];
+			
+		}
+		
+
+		double[] diferenciaDeCoordenadas = {resultado[0] -this.coordInicialesEste, resultado[1] -this.coordInicialesNorte}; // Este, Norte
+		
+		this.canvas.setFactorCanvasX(this.diferenciaEste);
+		this.canvas.setFactorCanvasY(this.diferenciaNorte);
+		this.canvas.setX((int) (diferenciaDeCoordenadas[0]));
+		this.canvas.setY((int) -(diferenciaDeCoordenadas[1]));
+		this.canvas.repaint();
 		
 		
 		
@@ -238,8 +293,89 @@ public class Observer implements IObserver {
 		String norteSur = "N";
 		
 		
-		double longitud = longitudaGrados(337.619); // TO-DO
-		double latitud = latitudaGrados(4023.429);  // TO-DO
+		//double longitud = longitudaGrados(337.619); // Lo de la práctica 1, el ejemplo, se ve que funciona
+		//double latitud = latitudaGrados(4023.429); 
+		
+		//double longitud = longitudaGrados(337.7013); // Lo de la práctica 1, el ejemplo, se ve que funciona
+		//double latitud = latitudaGrados(4023.3004); 
+		
+		double longitud = longitudaGrados(337.9666666); // Coordenadas punto rojo de INSIA
+		double latitud = latitudaGrados(4023.16666667);
+		
+		
+		System.out.println("LongGrad: " + longitud + " LatGrad " + latitud);
+		
+		double altura = 0.0;
+		int huso = 30; // No hay que complicarse calculando desde la hora UTC, el profe nos ha dicho que podemos hacerlo así
+		
+		double[] resultado = calculosSiguientes(longitud, latitud, altura, oesteEste, norteSur, huso);
+		
+		System.out.println("UTM Norte: " + resultado[1] + "\nUTM Este : " + resultado[0]);
+		
+		this.canvas = new MyCanvas();
+		JFrame f = new JFrame("Practica 2: Sistema de Geolocalizacion UPM-INSIA");
+		f.add(this.canvas);
+		f.setSize(955, 870);
+		f.setLocation(300, 0);
+		f.setVisible(true);
+		System.out.println("Imagen");
+		f.addWindowListener(this.canvas);
+		
+		this.canvas.setX(huso);
+		this.canvas.setY(huso);
+		this.canvas.repaint();
+		
+		try {
+			Thread.sleep(4000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+		// Según la foto comenzamos en 40º 23' 33'' N 3º 38' 04 '' W, o sea, 4023,55 N y 338,067 W
+		// Y terminamos en 40º 23' 02'' N 3º 37' 18 '' W, o sea, 4023,033 N y 337,300 W
+		
+		// Para el INSIA son 40º 23' 15'' N, 3º 38' 1'' W -> 4023.25 N, 338.0166666666666 W
+		// 40º 23' 08'' N, 3º 37' 50'' W -> 4023.1333333333 N, 337.8333333333 W
+		//if (this.primeraVez) {
+			this.primeraVez = false;
+			System.out.println("COORD INICIALES");
+			//double[] coordIniciales = this.coordenadasInicialesCanvas(338.067, "W", 4023.550, "N");
+			double[] coordIniciales = this.coordenadasInicialesCanvas(338.0166666666666, "W", 4023.25, "N");
+			this.coordInicialesEste = coordIniciales[0];
+			this.coordInicialesNorte = coordIniciales[1];
+			System.out.println("COORD FINALES");
+			//double[] coordFinales = this.coordenadasInicialesCanvas(337.300, "W", 4023.033, "N");
+			double[] coordFinales = this.coordenadasInicialesCanvas(337.8333333333, "W", 4023.1333333333, "N");
+			this.coordFinalesEste = coordFinales[0];
+			this.coordFinalesNorte = coordFinales[1];
+			double[] DifDeInicialAFinal = {coordFinales[0] -coordIniciales[0], -(coordFinales[1] -coordIniciales[1])}; // Este, Norte
+			this.diferenciaEste = DifDeInicialAFinal[0];
+			this.diferenciaNorte = DifDeInicialAFinal[1];
+			
+		//}
+		
+
+		double[] diferenciaDeCoordenadas = {resultado[0] -this.coordInicialesEste, resultado[1] -this.coordInicialesNorte}; // Este, Norte
+		
+		this.canvas.setFactorCanvasX(this.diferenciaEste);
+		this.canvas.setFactorCanvasY(this.diferenciaNorte);
+		this.canvas.setX((int) (diferenciaDeCoordenadas[0]));
+		this.canvas.setY((int) -(diferenciaDeCoordenadas[1]));
+		this.canvas.repaint();
+		
+	}
+	
+	// Según la foto comenzamos en 40º 23' 33'' N 3º 38' 04 '' W
+	public double[] coordenadasInicialesCanvas(double longitudOrig, String oesteEste, double latitudOrig, String norteSur) { // Esto es para pruebas de cálculos según el ejemplo de errata, debería salir lo mismo
+
+		// Según la foto comenzamos en 40º 23' 33'' N 3º 38' 04 '' W
+		//String oesteEste = "W";
+		//String norteSur = "N";
+		
+		
+		double longitud = longitudaGrados(longitudOrig); 
+		double latitud = latitudaGrados(latitudOrig);
 		
 		System.out.println("LongGrad: " + longitud + " LatGrad " + latitud);
 		
@@ -250,6 +386,7 @@ public class Observer implements IObserver {
 		
 		System.out.println("UTM Norte: " + resultado[1] + "\nUTM Este : " + resultado[0]);
 		
+		return resultado;
 	}
 
 	

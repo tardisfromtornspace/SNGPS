@@ -63,10 +63,9 @@ public class Subject implements IObservable, Runnable{
 	}
 	
 	public void leerPuertos() {
-		SerialPort[] comPorts = SerialPort.getCommPorts(); // TO-DO ver si es el 3?
+		SerialPort[] comPorts = SerialPort.getCommPorts();
 		for (SerialPort s: comPorts) {
 			System.out.println("Puerto disponible: " + s);
-			// TO-DO verificar que es el del GPS
 		}
 		
 		// Suponemos que solo hay uno y es el primero
@@ -100,38 +99,6 @@ public class Subject implements IObservable, Runnable{
 		      cosilla.notifyObservers();
 		   }
 		});
-		
-		
-		/*
-		MessageListener listener = new MessageListener();
-		comPort.addDataListener(listener);
-		*/
-		
-		
-		
-		/*comPort.addDataListener(
-				
-				new SerialPortDataListener() {
-		   @Override
-		   public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_RECEIVED; } // LISTENING_EVENT_DATA_RECEIVED; // LISTENING_EVENT_DATA_AVAILABLE
-		   
-		   //@Override
-		   //public byte[] getMessageDelimiter() { return new byte[] { (byte) '\r', (byte) '\n' }; } // 0x0D 0X0A
-		   
-		   @Override
-		   public void serialEvent(SerialPortEvent event)
-		   {
-			  byte[] newData = event.getReceivedData();
-		      //byte[] newData = new byte[comPort.bytesAvailable()]; //event.getReceivedData();
-		      //int numRead = comPort.readBytes(newData, newData.length);
-		      //System.out.println("Read " + numRead + " bytes.");
-		      
-		      //System.out.println("Received data of size: " + newData.length);
-		      for (int i = 0; i < newData.length; ++i)
-		         System.out.print((char)newData[i]);
-		      //System.out.println("\n");
-		   }
-		});*/
 		
 	}
 	
