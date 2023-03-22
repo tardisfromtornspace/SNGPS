@@ -15,11 +15,12 @@ public class MyCanvas extends Canvas implements WindowListener{
 	int x = 0;
 	int y = 0;
 	
+	String imageName = "ImagenUPMeINSIA.PNG"; // Imagen por defecto
 	int imageHeight = 0;
 	int imageWidth = 0;
 	
-	double factorCanvasX = 1.0; //936 / DifDeInicialAFinal[0]; // Alterado entre original, la imagen copiada tiene 936 x 826
-	double factorCanvasY = 1.0; //826 / DifDeInicialAFinal[1]; // Alterado entre original, la imagen copiada tiene 936 x 826
+	double factorCanvasX = 1.0;
+	double factorCanvasY = 1.0;
 	
 	public int getX() {
 		return x;
@@ -35,6 +36,15 @@ public class MyCanvas extends Canvas implements WindowListener{
 
 	public void setY(double y) {
 		this.y = (int) (y * factorCanvasY);
+	}
+	
+
+	public String getImageName() {
+		return imageName;
+	}
+
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
 	}
 
 	public double getFactorCanvasX() {
@@ -55,9 +65,9 @@ public class MyCanvas extends Canvas implements WindowListener{
 
 	public void paint(Graphics g) {
 		Toolkit t = Toolkit.getDefaultToolkit();
-		//Image i = t.getImage("ImagenUPMeINSIA.PNG");
 		// Image i = t.getImage("ImagenUPMeINSIA.PNG");
-		Image i = t.getImage("ImagenINSIA.PNG");
+		// Image i = t.getImage("ImagenINSIA.PNG");
+		Image i = t.getImage(imageName);
 		imageHeight = i.getHeight(null);
 		imageWidth = i.getWidth(null);
 		System.out.println("Imagen de dimensiones "+ imageWidth +"x"+ imageHeight);
@@ -72,6 +82,7 @@ public class MyCanvas extends Canvas implements WindowListener{
 	
 	public static void main(String[] losArgumentos) {
 		MyCanvas m = new MyCanvas();
+		m.setImageName("ImagenINSIA.PNG");
 		JFrame f = new JFrame("Practica 2: Sistema de Geolocalizacion UPM-INSIA");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.add(m);
