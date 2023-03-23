@@ -37,7 +37,6 @@ public class MyCanvas extends Canvas implements WindowListener{
 	public void setY(double y) {
 		this.y = (int) (y * factorCanvasY);
 	}
-	
 
 	public String getImageName() {
 		return imageName;
@@ -65,9 +64,11 @@ public class MyCanvas extends Canvas implements WindowListener{
 
 	public void paint(Graphics g) {
 		Toolkit t = Toolkit.getDefaultToolkit();
+
 		// Image i = t.getImage("ImagenUPMeINSIA.PNG");
 		// Image i = t.getImage("ImagenINSIA.PNG");
 		Image i = t.getImage(imageName);
+
 		imageHeight = i.getHeight(null);
 		imageWidth = i.getWidth(null);
 		System.out.println("Imagen de dimensiones "+ imageWidth +"x"+ imageHeight);
@@ -102,7 +103,6 @@ public class MyCanvas extends Canvas implements WindowListener{
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		// TODO Auto-generated method stub
 		System.out.println("Ventana cerrandose, cerrando programa");
 		System.exit(0);
 		

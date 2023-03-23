@@ -9,11 +9,16 @@ import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
 
 public class Subject implements IObservable, Runnable{
+
+	private int id;
+	private String mode;
+
 	private ArrayList<IObserver> observers;
 	private MessageListener listener;
 	private String mensaje = new String();
 
-	public Subject() {
+	public Subject(int id) {
+		this.id = id;
 		this.observers = new ArrayList<IObserver>();
 	}
 	
@@ -36,7 +41,7 @@ public class Subject implements IObservable, Runnable{
 	public void notifyObservers() {
 		for (Iterator<IObserver> it = observers.iterator(); it.hasNext();) {
 			IObserver iObserver = it.next();
-			iObserver.actualizar();
+			iObserver.actualizar(this.id);
 		}
 	}
 	
@@ -61,15 +66,35 @@ public class Subject implements IObservable, Runnable{
 		Thread hilo = new Thread(this);
 		hilo.start();
 	}
+#<<<<<<< HEAD
 	
 	public void leerPuertos() {
+#=======
+#	public void leerPuertos() {
+#		this.mode = "default";
+#	}
+#	public void leerPuertos(String dir) {
+#		this.mode = dir;
+#	}
+#	
+#	private void leerPuertosPriv(String dir) {
+#>>>>>>> c7658fcbed252e9ffd7a99be76e68e8afeb451bb
 		SerialPort[] comPorts = SerialPort.getCommPorts();
 		for (SerialPort s: comPorts) {
 			System.out.println("Puerto disponible: " + s);
 		}
 		
+#<<<<<<< HEAD
 		// Suponemos que solo hay uno y es el primero
 		SerialPort comPort = SerialPort.getCommPorts()[0];
+# TO-DO Primero cambia los # por // y luego elimina los que no uses, el modo comentado acá parece mejor pero ve si funciona con el ordenador
+#=======
+#		SerialPort comPort;
+#		// Suponemos que solo hay uno y es el primero
+#		if(dir.equals("default"))
+#			comPort = SerialPort.getCommPorts()[0];
+#		comPort = SerialPort.getCommPort(dir);
+#>>>>>>> c7658fcbed252e9ffd7a99be76e68e8afeb451bb
 		System.out.println("Puerto usado: " + comPort);
 		comPort.openPort();
 		comPort.setParity(0);
@@ -104,7 +129,11 @@ public class Subject implements IObservable, Runnable{
 	
 	public void run() {
 		synchronized (this) {
+#<<<<<<< HEAD
 			leerPuertos();
+#=======
+#			leerPuertosPriv(this.mode);
+#>>>>>>> c7658fcbed252e9ffd7a99be76e68e8afeb451bb
 		}
 	}
 
