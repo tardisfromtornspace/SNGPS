@@ -8,11 +8,11 @@ import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
 
-public class Subject implements IObservable, Runnable {
+public class Subject implements IObservable, Runnable{
 	private ArrayList<IObserver> observers;
-	private String notifyMessage;
 	private MessageListener listener;
-	
+	private String mensaje = new String();
+
 	public Subject() {
 		this.observers = new ArrayList<IObserver>();
 	}
@@ -33,67 +33,111 @@ public class Subject implements IObservable, Runnable {
 		this.observers.remove(observador);
 	}
 	@Override
-	public void notifyObservers(int notifyObject) {
-		if(notifyObject != 1)
-			return;
-		for(IObserver io:this.observers)
-			io.actualizar();
+	public void notifyObservers() {
+		for (Iterator<IObserver> it = observers.iterator(); it.hasNext();) {
+			IObserver iObserver = it.next();
+			iObserver.actualizar();
+		}
 	}
 	
+	public MessageListener getListener() {
+		return listener;
+	}
+
+	public void setListener(MessageListener listener) {
+		this.listener = listener;
+	}
+	
+	
+	public String getMensaje() {
+		return mensaje;
+	}
+
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
+
 	public void start() {
 		Thread hilo = new Thread(this);
 		hilo.start();
 	}
-	public void setNotifyMessage(String notifyMessage) {
-		this.notifyMessage = notifyMessage;
-	}
-	public String getNotifyMessage() {
-		return this.notifyMessage;
-	}
-	public void setMessageListener(MessageListener listener) {
-		this.listener = listener;
-	}
 	
-	public void mainActivity() {
-		/*//SerialPort comPorts = SerialPort.getCommPort("/s()dev/pts/9"); // TO-DO ver si es el 3?
-		System.out.println(SerialPort.getCommPorts().length);
+	public void leerPuertos() {
+		SerialPort[] comPorts = SerialPort.getCommPorts(); // TO-DO ver si es el 3?
 		for (SerialPort s: comPorts) {
 			System.out.println("Puerto disponible: " + s);
 			// TO-DO verificar que es el del GPS
 		}
 		
 		// Suponemos que solo hay uno y es el primero
-		
-		//SerialPort comPort = SerialPort.getCommPort("/dev/pts/6");
-		if(SerialPort.getCommPorts().length != 0) {
-			comPort = SerialPort.getCommPorts()[0];*/
-			//
-			
-			SerialPort[] comPorts = SerialPort.getCommPorts(); // TO-DO ver si es el 3?
-			for (SerialPort s: comPorts) {
-				System.out.println("Puerto disponible: " + s);
-				// TO-DO verificar que es el del GPS
-			}
-			
-			// Suponemos que solo hay uno y es el primero
-			SerialPort comPort = SerialPort.getCommPorts()[0];
-			System.out.println("Puerto usado: " + comPort);
-			//
-			
+		SerialPort comPort = SerialPort.getCommPorts()[0];
 		System.out.println("Puerto usado: " + comPort);
 		comPort.openPort();
 		comPort.setParity(0);
 		comPort.setBaudRate(4800);
 		comPort.setNumStopBits(SerialPort.ONE_STOP_BIT);
-
-		System.out.println("Puerto ab ierto: "+ comPort.isOpen());
+		System.out.println("Puerto abierto: "+ comPort.isOpen());
 		
+		Subject cosilla = this;
+		
+        comPort.addDataListener(
+				
+				new MessageListener() {
+
+		   @Override
+		   public void serialEvent(SerialPortEvent event)
+		   {
+		      byte[] delimitedMessage = event.getReceivedData();
+		      
+		      StringBuilder mensaje = new StringBuilder();
+		      
+		      for (int i = 0; i < delimitedMessage.length; ++i) {
+			         //System.out.print((char)delimitedMessage[i]);
+			         mensaje.append(Character.toString((char)delimitedMessage[i]));
+		      }
+		      
+		      cosilla.setMensaje(mensaje.toString());
+		      cosilla.notifyObservers();
+		   }
+		});
+		
+		
+		/*
+		MessageListener listener = new MessageListener();
 		comPort.addDataListener(listener);
+		*/
+		
+		
+		
+		/*comPort.addDataListener(
+				
+				new SerialPortDataListener() {
+		   @Override
+		   public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_RECEIVED; } // LISTENING_EVENT_DATA_RECEIVED; // LISTENING_EVENT_DATA_AVAILABLE
+		   
+		   //@Override
+		   //public byte[] getMessageDelimiter() { return new byte[] { (byte) '\r', (byte) '\n' }; } // 0x0D 0X0A
+		   
+		   @Override
+		   public void serialEvent(SerialPortEvent event)
+		   {
+			  byte[] newData = event.getReceivedData();
+		      //byte[] newData = new byte[comPort.bytesAvailable()]; //event.getReceivedData();
+		      //int numRead = comPort.readBytes(newData, newData.length);
+		      //System.out.println("Read " + numRead + " bytes.");
+		      
+		      //System.out.println("Received data of size: " + newData.length);
+		      for (int i = 0; i < newData.length; ++i)
+		         System.out.print((char)newData[i]);
+		      //System.out.println("\n");
+		   }
+		});*/
+		
 	}
 	
 	public void run() {
 		synchronized (this) {
-			mainActivity();
+			leerPuertos();
 		}
 	}
 
@@ -106,7 +150,7 @@ public class Subject implements IObservable, Runnable {
 	public int hashCode() {
 		return Objects.hash(observers);
 	}
-//f
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

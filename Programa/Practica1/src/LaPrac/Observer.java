@@ -73,7 +73,8 @@ public class Observer implements IObserver {
 	}
 	
 	public double calcularN (double a, double e2, double phi) {
-		double N = a / Math.sqrt(1 - e2 * Math.pow(Math.sin(phi), 2));
+		System.out.println("a " +a+ " e2 " +e2+" phi "+phi );
+		double N = a / Math.sqrt(1.0 - e2 * Math.pow(Math.sin(phi), 2));
 		return N;
 	}
 	
@@ -100,7 +101,7 @@ public class Observer implements IObserver {
 	}
 	
 	public double calcularUTM_Norting(double M, double N, double A, double T, double C, double e2, double phi) {
-		double elUMT_Norting = 0.9996 * (M * N * Math.tan(phi) * ( Math.pow(A, 2)/2.0 + (5.0 - T + 9* C + 4 * Math.pow(C, 2)) * Math.pow(A, 4)/24.0 + ((61.0 - 58.0 * T + Math.pow(T, 2) + 600.0 * C - 330.0 * e2) * Math.pow(A, 6))/720.0 ) );
+		double elUMT_Norting = 0.9996 * (M + N * Math.tan(phi) * ( Math.pow(A, 2)/2.0 + (5.0 - T + 9* C + 4 * Math.pow(C, 2)) * Math.pow(A, 4)/24.0 + ((61.0 - 58.0 * T + Math.pow(T, 2) + 600.0 * C - 330.0 * e2) * Math.pow(A, 6))/720.0 ) );
 		return elUMT_Norting;
 	}
 	
@@ -110,50 +111,62 @@ public class Observer implements IObserver {
 	}
 	
 	public double[] deWGS84aED50(double lambda, double phi, double e2, double a) {
-		// TO-DO preguntar el profe sobre esto
 		double N = calcularN(a, e2, phi);
 		double rho = calcularRho(a, e2, phi);
-		double dX = 0.0, dY = 0.0, dZ = 0.0; // TO-DO desplazamientos de las elipsoides consultar con profesor
-		double da = Observer.aEuropeo - Observer.aWGS84, df = Observer.fEuropeo - Observer.fWGS84; // Variacion en el semieje mayor y aplanamiento de las elipsoides TO-DO consultar con profe
+		double dX = 0.0, dY = 0.0, dZ = 0.0; // Desplazamientos de las elipsoides consultar con profesor
+		double da = Observer.aEuropeo - Observer.aWGS84, df = Observer.fEuropeo - Observer.fWGS84; // Variacion en el semieje mayor y aplanamiento de las elipsoides
 		double dPhi = (-dX * Math.sin(phi)*Math.cos(lambda) - dY * Math.sin(phi)*Math.cos(lambda) + dZ * Math.cos(phi) + (a * df + f *da) * Math.sin(2 * phi))/(rho * Math.sin(1));
 		double dLambda = (-dX * Math.sin(lambda) + dY * Math.cos(lambda))/(N * Math.cos(phi)*Math.cos(1));
-		// TO-DO , todos esos cos(1) y sin(1) son 1'', 1 segundo de arco TO-DO revisar
+		// todos esos cos(1) y sin(1) son 1'', 1 segundo de arco
 		return new double[] {dPhi, dLambda};
 	} 
 	
 	public double[] calculosSiguientes(double longitud, double latitud, double altura, String oesteEste, String norteSur, int huso) {
 		
-		double latitudphi     = ( oesteEste.equalsIgnoreCase("W") ? -1 : 1 ) * gradaRadianes(latitud);
-		double longitudlambda = ( norteSur.equalsIgnoreCase("S") ? -1 : 1 ) * gradaRadianes(longitud);
+		double latitudphi     = ( norteSur.equalsIgnoreCase("S") ? -1 : 1 ) * gradaRadianes(latitud);
+		double longitudlambda = ( oesteEste.equalsIgnoreCase("W") ? -1 : 1 ) * gradaRadianes(longitud);
+		System.out.println("LatitudPhi: " + latitudphi + " LongitudLambda: " + longitudlambda);
 		
 		this.lambda0 = huso * 6.0 - restaAlSignoLongitud;
 		this.lambda0rad = gradaRadianes(this.lambda0);
+	
 		this.e = calculare(this.e2);
-		double N = calcularN(this.a, this.e2, this.lambda0rad);
-		double T = calcularT(lambda0rad);
-		double C = calcularC(this.e, lambda0rad);
+
+		double N = calcularN(this.a, this.e2, latitudphi);
+		double T = calcularT(latitudphi);
+		double C = calcularC(this.e, latitudphi);
 		double A = calcularA(longitudlambda, lambda0rad, latitudphi); // phi es latitud, lambda es longitud
-		double laM = calcularM(this.a, this.e2, latitudphi) ;
+
+		double laM = calcularM(this.a, this.e2, latitudphi);
+		System.out.println("Lambda0 " + this.lambda0);
+		System.out.println("Lambda0 (radianes) " + this.lambda0rad);
+		System.out.println("e' " + this.e);
+		System.out.println("N " + N);
+		System.out.println("T " + T);
+		System.out.println("C " + C);
+		System.out.println("A " + A);
+		System.out.println("M " + laM);
 		double elUTM_Easting = calcularUMT_Easting(N, A, T, C, this.e2);
 		double elUTM_Norting = calcularUTM_Norting(laM, N, A, T, C, this.e2, latitudphi);
-		// TO-DO preguntar al profe si debemos hacer esto tambiï¿½n Y PASARLO A EUROPEAS
+		/* ESTO DE ABAJO NO HACE FALTA HACERLO 
 		double[] ajusteaEuropeo = deWGS84aED50(longitud, latitud, this.e2, this.a);
-		
+		*/
 		double[] result = new double[] {elUTM_Easting, elUTM_Norting};
 		return result;
 	}
 	
 	public double longitudaGrados(double valor) {
-		double grados = Math.floor(valor/100.d);
+		double grados = Math.floor(valor/100);
 		double minutos = valor - grados * 100;
 		return grados + minutos/60.0;
 	}
 	
 	public double latitudaGrados(double valor) {
-		double grados = Math.floor(valor/100.d);
+		double grados = Math.floor(valor/100);
 		double minutos = valor - grados * 100;
 		return grados + minutos/60.0;
 	}
+	
 	private ArrayList<String> getParsedStringArrayList(String cadena, char delimitador)
 	{
 		ArrayList<String> parseado = new ArrayList<>(Arrays.asList(cadena.split(",")));
@@ -161,30 +174,89 @@ public class Observer implements IObserver {
 
 		return parseado;
 	}
+	
 	public void actualizar() {
 		// Tomo el dato, y lo parseo
-		// Luego ajusto con fï¿½rmulass
-		String cadena = miSujeto.getNotifyMessage();
+		// Luego ajusto con fórmulas
+		String cadena = miSujeto.getMensaje(); //""; // miSujeto.getMensaje(); // Esto se ajustaría a lo sacado del Subject
+		
+		System.out.println("Cadena GPS: " + cadena);
 		ArrayList<String> parseada = getParsedStringArrayList(cadena, ',');
 		if(!parseada.get(0).equals("$GPGGA") || parseada.size() != 15)
 			return;
-		System.out.print("Entrada GPS (Solo tratar GPGGA):\n"+ miSujeto.getNotifyMessage());
 		System.out.println("Campos parseo :"+ parseada);
-		// Acï¿½ queda bien filtrarlo, separarlos por comas, solo nos interesan tramas $GPGGA de momento
+		// Acá queda bien filtrarlo, separarlos por comas, solo nos interesan tramas $GPGGA de momento
 		
 		// De lo filtrado sacamos esto
 		// Ej. $GPGGA,092831.567,4023.413,N,00337.529,W,1,12,1.0,0.0,M,0.0,M,,*7
 		//     [ 0   ,     1    ,   [2] ,[3],   [4] ,[5],6, 7, 8,[9],A, B ,C,D,E]
 		String oesteEste = parseada.get(5);
+		if (oesteEste.length() == 0) {
+			oesteEste = "E";
+		}
 		String norteSur = parseada.get(3);
-		double longitud = longitudaGrados(Double.parseDouble(parseada.get(4)));
-		double latitud = latitudaGrados(Double.parseDouble(parseada.get(2)));
-		double altura = Double.parseDouble(parseada.get(9));
-		int huso = 30; // TO-DO calcular con hora UTC
+		if (norteSur.length() == 0) {
+			norteSur = "N";
+		}
+		double valor = 0.0;
+		if (parseada.get(4).length() > 0) {
+			valor = Double.parseDouble(parseada.get(4));
+		}
+		double longitud = longitudaGrados(valor);
+		
+		valor = 0.0;
+		if (parseada.get(2).length() > 0) {
+			valor = Double.parseDouble(parseada.get(2));
+		}
+		double latitud = latitudaGrados(valor);
+
+		double altura = 0.0;
+		
+		if (parseada.get(9).length() > 0)
+		    altura = Double.parseDouble(parseada.get(9));
+		
+		int huso = 30; // No hay que complicarse calculando desde la hora UTC, el profe nos ha dicho que podemos hacerlo así
 		
 		double[] resultado = calculosSiguientes(longitud, latitud, altura, oesteEste, norteSur, huso);
 		
-		System.out.println("UTM Norte: " + resultado[1] + "\nUTM Este: " + resultado[0] +"\n");
+		System.out.println("UTM Norte: " + resultado[1] + "\nUTM Este : " + resultado[0]);
+		
+		
+		
+	}
+	
+	public void test() { // Esto es para pruebas de cálculos según el ejemplo de errata, debería salir lo mismo
+		// Tomo el dato, y lo parseo
+		// Luego ajusto con fórmulas
+		String cadena = miSujeto.getMensaje(); //""; // miSujeto.getMensaje(); // Esto se ajustaría a lo sacado del Subject
+		System.out.println("Cadena GPS: " + cadena);
+		
+		// Acá queda bien filtrarlo, separarlos por comas, solo nos interesan tramas $GPGGA de momento
+		
+		// De lo filtrado sacamos esto
+		String oesteEste = "W";
+		String norteSur = "N";
+		
+		
+		double longitud = longitudaGrados(337.619); // TO-DO
+		double latitud = latitudaGrados(4023.429);  // TO-DO
+		
+		System.out.println("LongGrad: " + longitud + " LatGrad " + latitud);
+		
+		double altura = 0.0; // TO-DO
+		int huso = 30; // No hay que complicarse calculando desde la hora UTC, el profe nos ha dicho que podemos hacerlo así
+		
+		double[] resultado = calculosSiguientes(longitud, latitud, altura, oesteEste, norteSur, huso);
+		
+		System.out.println("UTM Norte: " + resultado[1] + "\nUTM Este : " + resultado[0]);
+		
+	}
+
+	
+	public static void main(String[] a) {
+		Subject losPuertos = new Subject();
+		Observer calculadora = new Observer(losPuertos, 30, "GPS");
+		calculadora.test();
 	}
 
 }
