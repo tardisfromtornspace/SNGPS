@@ -7,7 +7,11 @@ import java.util.Arrays;
 import javax.swing.JFrame;
 
 public class Observer implements IObserver {
+<<<<<<< HEAD
 	IObservable miSujeto;
+=======
+	ArrayList<IObservable> misSujetos;
+>>>>>>> c7658fcbed252e9ffd7a99be76e68e8afeb451bb
 	public static double aEuropeo  = 6378388.0;
 	public static double aWGS84    = 6378137.0;
 	
@@ -28,14 +32,17 @@ public class Observer implements IObserver {
 	private double e;
 	private double e2;
 	private int huso;
+
 	private int huso1;
 	private int huso2;
+
 	private double signoLongitud = 0.0; // -1 W, +1 E
 	private double lambda0 = 0.0;
 	private double lambda0rad = 0.0;
 	
 	MyCanvas canvas;
-	
+
+	MyFrame frame;	
 	
 	boolean primeraVez = true;
 	
@@ -53,6 +60,10 @@ public class Observer implements IObserver {
 	
 	public Observer(IObservable miSujeto, int huso, String tipo) {
 		this.miSujeto = miSujeto;
+
+		this.misSujetos = new ArrayList<>();
+		this.misSujetos.add(miSujeto);
+
 		if (tipo.equalsIgnoreCase("Europeo")) {
 			calculosIniciales(aEuropeo, fEuropeo, e2Europeo, huso);
 		} else {
@@ -61,14 +72,18 @@ public class Observer implements IObserver {
 		this.miSujeto.addObserver(this);
 		this.canvas = new MyCanvas();
 	}
-	
+		
 	public Observer(IObservable miSujeto, int huso, String tipo, MyCanvas canvas) {
 		this.miSujeto = miSujeto;
+
+		this.misSujetos = new ArrayList<>();
+		this.misSujetos.add(miSujeto);
 		if (tipo.equalsIgnoreCase("Europeo")) {
 			calculosIniciales(aEuropeo, fEuropeo, e2Europeo, huso);
 		} else {
 			calculosIniciales(aWGS84, fWGS84, e2WGS84, huso);
 		}
+<<<<<<< HEAD
 		this.miSujeto.addObserver(this);
 		this.canvas = canvas;
 	}
@@ -105,14 +120,32 @@ public class Observer implements IObserver {
 		this.primeraVez = primeraVez;
 	}
 
+	public Observer(int huso, String tipo, MyFrame frame) {
+		if (tipo.equalsIgnoreCase("Europeo")) {
+			calculosIniciales(aEuropeo, fEuropeo, e2Europeo, huso);
+		} else {
+			calculosIniciales(aWGS84, fWGS84, e2WGS84, huso);
+		}
+		this.misSujetos = new ArrayList<>();
+		this.frame = frame;
+	}
+
+	public void addObservable(IObservable sujeto)
+	{
+		sujeto.addObserver(this);
+		this.misSujetos.add(sujeto);
+	}
+
 	public void calculosIniciales(double a, double f, double e2, int huso) {
 		this.a = a;
 		this.b = a * (1 -f);
 		this.f = f;
 		this.e2 = e2;
 		this.huso = huso;
+
 		this.huso1 = huso; // Esto está por si acaso a alguien se le olvida mandar husos luego, tomo la misma área por defecto
 		this.huso2 = huso;
+
 		this.lambda0 = huso * 6.0 - restaAlSignoLongitud;
 		this.lambda0rad = gradaRadianes(this.lambda0);
 	}
@@ -206,9 +239,11 @@ public class Observer implements IObserver {
 		double A = calcularA(longitudlambda, lambda0rad, latitudphi); // phi es latitud, lambda es longitud
 
 		double laM = calcularM(this.a, this.e2, latitudphi);
+
 		System.out.println("Lambda0 " + lambda0);
 		System.out.println("Lambda0 (radianes) " + lambda0rad);
 		System.out.println("e'2 " + this.e2);
+
 		System.out.println("e' " + this.e);
 		System.out.println("N " + N);
 		System.out.println("T " + T);
@@ -244,20 +279,29 @@ public class Observer implements IObserver {
 		return parseado;
 	}
 	
+#<<<<<<< HEAD
 	/*
 	 * Tomo el dato de mi Sujeto
 	 * Parseo el dato
-	 * Realizo las operaciones pertinentes de ajsute de coordenadas
+	 * Realizo las operaciones pertinentes de ajuste de coordenadas
 	 * 
 	 * */
-	public void actualizar() {
-		String cadena = miSujeto.getMensaje();
+#	public void actualizar() {
+#		String cadena = miSujeto.getMensaje();
+#=======
+	public void actualizar(int issuer) {
+		if(issuer >= this.misSujetos.size())
+			return;
+
+		String cadena = misSujetos.get(issuer).getMensaje();
+#>>>>>>> c7658fcbed252e9ffd7a99be76e68e8afeb451bb
 		
 		System.out.println("Cadena GPS: " + cadena);
 		ArrayList<String> parseada = getParsedStringArrayList(cadena, ',');
 		if(!parseada.get(0).equals("$GPGGA") || parseada.size() != 15)
 			return;
 		System.out.println("Campos parseo :"+ parseada);
+
 		// Acá queda bien filtrarlo, separarlos por comas, solo nos interesan tramas $GPGGA de momento
 		
 		// De lo filtrado sacamos esto
@@ -335,7 +379,7 @@ public class Observer implements IObserver {
 	public void test() { // Esto es para pruebas de cálculos según el ejemplo de errata, debería salir lo mismo
 		// Tomo el dato, y lo parseo
 		// Luego ajusto con fórmulas
-		String cadena = miSujeto.getMensaje(); //""; // miSujeto.getMensaje(); // Esto se ajustaría a lo sacado del Subject
+		String cadena = miSujeto.get(0).getMensaje();
 		System.out.println("Cadena GPS: " + cadena);
 		
 		// Acá queda bien filtrarlo, separarlos por comas, solo nos interesan tramas $GPGGA de momento
@@ -344,7 +388,6 @@ public class Observer implements IObserver {
 		String oesteEste = "W";
 		String norteSur = "N";
 		
-		
 		//double longitud = longitudaGrados(337.619); // Lo de la práctica 1, el ejemplo, se ve que funciona
 		//double latitud = latitudaGrados(4023.429); 
 		
@@ -352,6 +395,7 @@ public class Observer implements IObserver {
 		//double latitud = latitudaGrados(4023.3004);
 		double ajuste = 0.5/60; // El ajuste es porque España se ve desde el plano ecuatorial y hace que algunas lectura en el eje norte se vean descompesadas casi medio segundo, además de que las coordenadas del mapa se hicieron un poco a ojímetro
 		//double ajuste = 0.0;
+
 		double longitud = longitudaGrados(337.9666666); // Coordenadas punto rojo de INSIA
 		double latitud = latitudaGrados(4023.16666667);
 		
@@ -359,8 +403,8 @@ public class Observer implements IObserver {
 		System.out.println("LongGrad: " + longitud + " LatGrad " + latitud);
 		
 		double altura = 0.0;
-		int huso = 30; // No hay que complicarse calculando desde la hora UTC, el profe nos ha dicho que podemos hacerlo así
-		this.huso = huso;
+
+		int huso = 30; // No hay que complicarse calculando desde la hora UTC, el profe nos ha dicho que podemos hacerlo asi
 		
 		double[] resultado = calculosSiguientes(longitud, latitud, altura, oesteEste, norteSur, huso);
 		
@@ -369,6 +413,7 @@ public class Observer implements IObserver {
 		//this.canvas = new MyCanvas();
 		//this.canvas.setImageName("ImagenINSIA.PNG");
 		//this.canvas.setImageName("ImagenUPMeINSIA.PNG");
+
 		JFrame f = new JFrame("Practica 2: Sistema de Geolocalizacion UPM-INSIA");
 		f.add(this.canvas);
 		f.setSize(955, 870);
@@ -428,10 +473,12 @@ public class Observer implements IObserver {
 		
 	}
 	
+
 	// Según la foto comenzamos en 40º 23' 33'' N 3º 38' 04 '' W
 	public double[] coordenadasInicialesCanvas(double longitudOrig, String oesteEste, double latitudOrig, String norteSur, int mismoHuso) { // Esto es para pruebas de cálculos según el ejemplo de errata, debería salir lo mismo
 
 		// Según la foto comenzamos en 40º 23' 33'' N 3º 38' 04 '' W
+
 		//String oesteEste = "W";
 		//String norteSur = "N";
 		
@@ -442,6 +489,7 @@ public class Observer implements IObserver {
 		System.out.println("LongGrad: " + longitud + " LatGrad " + latitud);
 		
 		double altura = 0.0; // TO-DO
+
 		int huso;
 		if (mismoHuso < -60 || mismoHuso > 60) {
 			huso = this.huso;
@@ -458,7 +506,7 @@ public class Observer implements IObserver {
 
 	
 	public static void main(String[] a) {
-		Subject losPuertos = new Subject();
+		Subject losPuertos = new Subject(0);
 		
 		MyCanvas m = new MyCanvas();
 		JFrame f = new JFrame("Practica 2: Sistema de Geolocalizacion UPM-INSIA");
@@ -482,7 +530,6 @@ public class Observer implements IObserver {
 		//calculadora.establecimientoCoordIniciales(338.0166666666666, "W", 4023.25, "N", 337.8333333333, "W", 4023.1333333333,"N", ajuste, 0.0, 30, 30);
 		
 		calculadora.test();
-
 	}
 
 }

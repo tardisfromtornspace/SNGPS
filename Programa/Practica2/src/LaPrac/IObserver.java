@@ -1,6 +1,10 @@
 package LaPrac;
 
 public interface IObserver {
-	public void actualizar(); 
-
+#<<<<<<< HEAD
+#	public void actualizar(); 
+#
+#=======
+	public void actualizar(int issuer);
+#>>>>>>> c7658fcbed252e9ffd7a99be76e68e8afeb451bb
 }

@@ -1,15 +1,15 @@
 package LaPrac;
 
-import javax.swing.JFrame;
-
-//import java.util.EventListener;
-
-// TO-DO añadir el plugin de lectura de COM
-import com.fazecast.jSerialComm.*;
-
-public class prueba {
-	
+public class Prueba {
 	public static void main(String[] args) {
+		MyFrame frame = new MyFrame("src/gpsMAP.jpg", "src/point.png");
+		Subject miSujeto = new Subject(0);
+		Observer calculadora = new Observer(30, "GPS", frame);
+		
+		calculadora.addObservable(miSujeto);
+		miSujeto.leerPuertos();
+		miSujeto.start();
+		/* ODIO COMO EL WINDOWS DECIDE SIMPLEMENTE SOBREESCRIBIR PRUEBA EN UN ÃšNICO ARCHIVO SIN NADA :(
 		Subject losPuertos = new Subject();
 		
 		MyCanvas m = new MyCanvas();
@@ -34,8 +34,7 @@ public class prueba {
 		//calculadora.getCanvas().setImageName("ImagenINSIA.PNG");
 		//calculadora.establecimientoCoordIniciales(338.0166666666666, "W", 4023.25, "N", 337.8333333333, "W", 4023.1333333333,"N", ajuste, 0.0, 30, 30);
 		losPuertos.start();
-		
+
+		*/
 	}
 }
-
-
