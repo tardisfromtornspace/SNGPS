@@ -9,7 +9,7 @@ public class Prueba {
 		
 		frame.addRotablePoint(255,0,0);
 		calculadora.addObservable(miSujeto);
-		miSujeto.leerPuertos("/dev/pts/2");
+		miSujeto.leerPuertos();
 		miSujeto.start();
 		calculadora.startSpeedTracer();
 	}

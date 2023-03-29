@@ -81,7 +81,8 @@ public class Subject implements IObservable, Runnable{
 		// Suponemos que solo hay uno y es el primero
 		if(dir.equals("default"))
 			comPort = SerialPort.getCommPorts()[0];
-		comPort = SerialPort.getCommPort(dir);
+		else
+			comPort = SerialPort.getCommPort(dir);
 		System.out.println("Puerto usado: " + comPort);
 		comPort.openPort();
 		comPort.setParity(0);
