@@ -350,6 +350,12 @@ public class Observer implements IObserver {
 		this.canvas.setY((int) -(diferenciaDeCoordenadas[1]));
 		this.canvas.repaint();
 		
+		this.frame.setLinkedPointRelativeLocation(
+				issuer,
+				diferenciaDeCoordenadas[0] / this.diferenciaEste,
+				-diferenciaDeCoordenadas[1] / this.diferenciaNorte
+				);
+		
 		
 		
 	}
