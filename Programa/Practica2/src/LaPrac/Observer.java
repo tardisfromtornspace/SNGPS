@@ -328,13 +328,13 @@ public class Observer implements IObserver {
 		if (parseada.get(9).length() > 0)
 		    altura = Double.parseDouble(parseada.get(9));
 		
-		int huso = 30; // No hay que complicarse calculando desde la hora UTC, el profe nos ha dicho que podemos hacerlo asÃ­
+		int huso = 30; // No hay que complicarse calculando desde la hora UTC, el profe nos ha dicho que podemos hacerlo así
 		
 		double[] resultado = calculosSiguientes(longitud, latitud, altura, oesteEste, norteSur, huso);
 		
 		System.out.println("UTM Norte: " + resultado[1] + "\nUTM Este : " + resultado[0]);
 		
-		double ajuste = 0.5/60; // Ajuste del problema de coordenadas a ojÃ­metro, hicimos un pequeÃ±o error de medio segundo en latitud, esto lo corrije
+		double ajuste = 0.5/60; // Ajuste del problema de coordenadas a ojímetro, hicimos un pequeño error de medio segundo en latitud, esto lo corrije
 		if (this.primeraVez) {
 			this.primeraVez = false;
 			establecimientoCoordIniciales(338.067, "W", 4023.550, "N", 337.300, "W", 4023.033,"N", ajuste, 0.0, this.huso, this.huso);
@@ -355,10 +355,8 @@ public class Observer implements IObserver {
 				diferenciaDeCoordenadas[0] / this.diferenciaEste,
 				-diferenciaDeCoordenadas[1] / this.diferenciaNorte
 				);
-		
-		
-		
 	}
+	
 	public void establecimientoCoordIniciales(double longitudInicial, String esteOesteInicial, double latitudInicial, String norteSurInicial, double longitudFinal, String esteOesteFinal, double latitudFinal, String norteSurFinal, double ajusteLatitud, double ajusteLongitud, int husoInicial, int husoFinal) {
 		this.setAjusteErrorLatitud(ajusteLatitud);
 		this.setAjusteErrorLongitud(ajusteLongitud);
