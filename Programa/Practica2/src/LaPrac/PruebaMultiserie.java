@@ -6,8 +6,8 @@ public class PruebaMultiserie {
 	public static void main(String[] args) {
 		String[] serialDirs = {
 				// Windows directories
-				// "COM2",
-				// "COM3",
+				"COM2",
+				"COM3",
 				
 				/*	Unix-like directories
 				 *	Just because they are virtual & not in the default
@@ -30,13 +30,13 @@ public class PruebaMultiserie {
 		
 		MyFrame frame = new MyFrame("src/gpsMAP.jpg", "src/point.png");
 		ArrayList<Subject> multiSer = new ArrayList<>();
-		Observer calculadora = new Observer(30, "GPS", frame);
 
 		{
 			int i;
 			for(i = 0; i < serialDirs.length; i++) {
 				frame.addPoint();
 				multiSer.add(new Subject(i));
+				Observer calculadora = new Observer(30, "GPS", frame);
 				calculadora.addObservable(multiSer.get(i));
 			}
 			for(i = 0; i < multiSer.size(); i++)

@@ -11,7 +11,7 @@ import com.fazecast.jSerialComm.SerialPortEvent;
 public class Subject implements IObservable, Runnable{
 
 	private int id;
-	private String mode;
+	private String mode = "default";
 
 	private ArrayList<IObserver> observers;
 	private MessageListener listener;
@@ -66,34 +66,30 @@ public class Subject implements IObservable, Runnable{
 		Thread hilo = new Thread(this);
 		hilo.start();
 	}
-//#<<<<<<< HEAD
+
 	public void leerPuertos(String dir) {
 		this.mode = dir;
-		leerPuertosPriv(this.mode);
+		//leerPuertosPriv(this.mode);
 	}
 	
     public void leerPuertos() {
 	    this.mode = "default";
-	    leerPuertosPriv(this.mode);
+	    //leerPuertosPriv(this.mode);
 	}
     
-private void leerPuertosPriv(String dir) {
+    private void leerPuertosPriv(String dir) {
 		SerialPort[] comPorts = SerialPort.getCommPorts();
 		for (SerialPort s: comPorts) {
 			System.out.println("Puerto disponible: " + s);
 		}
 		
-//#<<<<<<< HEAD
-		// Suponemos que solo hay uno y es el primero
-		SerialPort comPort = SerialPort.getCommPorts()[0];
-//# TO-DO Primero cambia los # por // y luego elimina los que no uses, el modo comentado acá parece mejor pero ve si funciona con el ordenador
-//#=======
-//#		SerialPort comPort;
-//#		// Suponemos que solo hay uno y es el primero
-//#		if(dir.equals("default"))
-//#			comPort = SerialPort.getCommPorts()[0];
-//#		comPort = SerialPort.getCommPort(dir);
-//#>>>>>>> c7658fcbed252e9ffd7a99be76e68e8afeb451bb
+		SerialPort comPort;
+
+		if(dir.equals("default")) // Suponemos que solo hay uno y es el primero
+			comPort = SerialPort.getCommPorts()[0];
+		else
+			comPort = SerialPort.getCommPort(dir);
+
 		System.out.println("Puerto usado: " + comPort);
 		comPort.openPort();
 		comPort.setParity(0);
@@ -129,9 +125,9 @@ private void leerPuertosPriv(String dir) {
 	public void run() {
 		synchronized (this) {
 //#<<<<<<< HEAD
-			leerPuertos();
+//			leerPuertos();
 //#=======
-//#			leerPuertosPriv(this.mode);
+			leerPuertosPriv(this.mode);
 //#>>>>>>> c7658fcbed252e9ffd7a99be76e68e8afeb451bb
 		}
 	}

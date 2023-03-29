@@ -1,16 +1,14 @@
 package LaPrac;
 
+import javax.swing.JFrame;
+
+/*
+ * Esta es la prueba con el Canvas
+ */
 public class Prueba2 {
 	public static void main(String[] args) {
-		MyFrame frame = new MyFrame("src/gpsMAP.jpg", "src/point.png");
-		Subject miSujeto = new Subject(0);
-		Observer calculadora = new Observer(30, "GPS", frame);
-		
-		calculadora.addObservable(miSujeto);
-		miSujeto.leerPuertos();
-		miSujeto.start();
-		/* ODIO COMO EL WINDOWS DECIDE SIMPLEMENTE SOBREESCRIBIR PRUEBA EN UN ÃšNICO ARCHIVO SIN NADA :(
-		Subject losPuertos = new Subject();
+		/* ODIO COMO EL WINDOWS DECIDE SIMPLEMENTE SOBREESCRIBIR PRUEBA EN UN ÚNICO ARCHIVO SIN NADA :( */
+		Subject losPuertos = new Subject(0);
 		
 		MyCanvas m = new MyCanvas();
 		//m.setImageName("ImagenINSIA.PNG");
@@ -34,7 +32,5 @@ public class Prueba2 {
 		//calculadora.getCanvas().setImageName("ImagenINSIA.PNG");
 		//calculadora.establecimientoCoordIniciales(338.0166666666666, "W", 4023.25, "N", 337.8333333333, "W", 4023.1333333333,"N", ajuste, 0.0, 30, 30);
 		losPuertos.start();
-
-		*/
 	}
 }
