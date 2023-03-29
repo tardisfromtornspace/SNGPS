@@ -1,6 +1,6 @@
 package LaPrac;
 
-public class Prueba {
+public class Prueba2 {
 	public static void main(String[] args) {
 		MyFrame frame = new MyFrame("src/gpsMAP.jpg", "src/point.png");
 		Subject miSujeto = new Subject(0);

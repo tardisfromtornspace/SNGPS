@@ -66,35 +66,34 @@ public class Subject implements IObservable, Runnable{
 		Thread hilo = new Thread(this);
 		hilo.start();
 	}
-#<<<<<<< HEAD
+//#<<<<<<< HEAD
+	public void leerPuertos(String dir) {
+		this.mode = dir;
+		leerPuertosPriv(this.mode);
+	}
 	
-	public void leerPuertos() {
-#=======
-#	public void leerPuertos() {
-#		this.mode = "default";
-#	}
-#	public void leerPuertos(String dir) {
-#		this.mode = dir;
-#	}
-#	
-#	private void leerPuertosPriv(String dir) {
-#>>>>>>> c7658fcbed252e9ffd7a99be76e68e8afeb451bb
+    public void leerPuertos() {
+	    this.mode = "default";
+	    leerPuertosPriv(this.mode);
+	}
+    
+private void leerPuertosPriv(String dir) {
 		SerialPort[] comPorts = SerialPort.getCommPorts();
 		for (SerialPort s: comPorts) {
 			System.out.println("Puerto disponible: " + s);
 		}
 		
-#<<<<<<< HEAD
+//#<<<<<<< HEAD
 		// Suponemos que solo hay uno y es el primero
 		SerialPort comPort = SerialPort.getCommPorts()[0];
-# TO-DO Primero cambia los # por // y luego elimina los que no uses, el modo comentado acá parece mejor pero ve si funciona con el ordenador
-#=======
-#		SerialPort comPort;
-#		// Suponemos que solo hay uno y es el primero
-#		if(dir.equals("default"))
-#			comPort = SerialPort.getCommPorts()[0];
-#		comPort = SerialPort.getCommPort(dir);
-#>>>>>>> c7658fcbed252e9ffd7a99be76e68e8afeb451bb
+//# TO-DO Primero cambia los # por // y luego elimina los que no uses, el modo comentado acá parece mejor pero ve si funciona con el ordenador
+//#=======
+//#		SerialPort comPort;
+//#		// Suponemos que solo hay uno y es el primero
+//#		if(dir.equals("default"))
+//#			comPort = SerialPort.getCommPorts()[0];
+//#		comPort = SerialPort.getCommPort(dir);
+//#>>>>>>> c7658fcbed252e9ffd7a99be76e68e8afeb451bb
 		System.out.println("Puerto usado: " + comPort);
 		comPort.openPort();
 		comPort.setParity(0);
@@ -129,11 +128,11 @@ public class Subject implements IObservable, Runnable{
 	
 	public void run() {
 		synchronized (this) {
-#<<<<<<< HEAD
+//#<<<<<<< HEAD
 			leerPuertos();
-#=======
-#			leerPuertosPriv(this.mode);
-#>>>>>>> c7658fcbed252e9ffd7a99be76e68e8afeb451bb
+//#=======
+//#			leerPuertosPriv(this.mode);
+//#>>>>>>> c7658fcbed252e9ffd7a99be76e68e8afeb451bb
 		}
 	}
 

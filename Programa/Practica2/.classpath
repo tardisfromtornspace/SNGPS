@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-<<<<<<< HEAD
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-16">
-=======
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17">
->>>>>>> c7658fcbed252e9ffd7a99be76e68e8afeb451bb
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-<<<<<<< HEAD
-	<classpathentry kind="lib" path="C:/ASL/Universidad/4to_curso/SNGPS/SNGPS/Programa/jSerialComm-2.9.3.jar">
-=======
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="/home/in/prog/tgps/SNGPS/Programa/jSerialComm-2.9.3.jar">
->>>>>>> c7658fcbed252e9ffd7a99be76e68e8afeb451bb
+	<classpathentry exported="true" kind="lib" path="C:/ASL/Universidad/4to_curso/SNGPS/SNGPS/Programa/jSerialComm-2.9.3.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

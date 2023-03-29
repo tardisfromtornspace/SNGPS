@@ -7,11 +7,11 @@ import java.util.Arrays;
 import javax.swing.JFrame;
 
 public class Observer implements IObserver {
-<<<<<<< HEAD
+
 	IObservable miSujeto;
-=======
+
 	ArrayList<IObservable> misSujetos;
->>>>>>> c7658fcbed252e9ffd7a99be76e68e8afeb451bb
+
 	public static double aEuropeo  = 6378388.0;
 	public static double aWGS84    = 6378137.0;
 	
@@ -55,8 +55,8 @@ public class Observer implements IObserver {
 	double diferenciaEste;
 	double diferenciaNorte;
 	
-	double ajusteErrorLatitud = 0.0; // Para el canvas, si se hace a ojímetro. -0.5/60
-	double ajusteErrorLongitud = 0.0; // Para el canvas, si se hace a ojímetro. 0.0
+	double ajusteErrorLatitud = 0.0; // Para el canvas, si se hace a ojï¿½metro. -0.5/60
+	double ajusteErrorLongitud = 0.0; // Para el canvas, si se hace a ojï¿½metro. 0.0
 	
 	public Observer(IObservable miSujeto, int huso, String tipo) {
 		this.miSujeto = miSujeto;
@@ -83,7 +83,7 @@ public class Observer implements IObserver {
 		} else {
 			calculosIniciales(aWGS84, fWGS84, e2WGS84, huso);
 		}
-<<<<<<< HEAD
+
 		this.miSujeto.addObserver(this);
 		this.canvas = canvas;
 	}
@@ -143,7 +143,7 @@ public class Observer implements IObserver {
 		this.e2 = e2;
 		this.huso = huso;
 
-		this.huso1 = huso; // Esto está por si acaso a alguien se le olvida mandar husos luego, tomo la misma área por defecto
+		this.huso1 = huso; // Esto esta por si acaso a alguien se le olvida mandar husos luego, tomo la misma area por defecto
 		this.huso2 = huso;
 
 		this.lambda0 = huso * 6.0 - restaAlSignoLongitud;
@@ -279,22 +279,18 @@ public class Observer implements IObserver {
 		return parseado;
 	}
 	
-#<<<<<<< HEAD
 	/*
 	 * Tomo el dato de mi Sujeto
 	 * Parseo el dato
 	 * Realizo las operaciones pertinentes de ajuste de coordenadas
 	 * 
 	 * */
-#	public void actualizar() {
-#		String cadena = miSujeto.getMensaje();
-#=======
+
 	public void actualizar(int issuer) {
 		if(issuer >= this.misSujetos.size())
 			return;
 
 		String cadena = misSujetos.get(issuer).getMensaje();
-#>>>>>>> c7658fcbed252e9ffd7a99be76e68e8afeb451bb
 		
 		System.out.println("Cadena GPS: " + cadena);
 		ArrayList<String> parseada = getParsedStringArrayList(cadena, ',');
@@ -302,7 +298,7 @@ public class Observer implements IObserver {
 			return;
 		System.out.println("Campos parseo :"+ parseada);
 
-		// Acá queda bien filtrarlo, separarlos por comas, solo nos interesan tramas $GPGGA de momento
+		// Aca queda bien filtrarlo, separarlos por comas, solo nos interesan tramas $GPGGA de momento
 		
 		// De lo filtrado sacamos esto
 		// Ej. $GPGGA,092831.567,4023.413,N,00337.529,W,1,12,1.0,0.0,M,0.0,M,,*7
@@ -332,13 +328,13 @@ public class Observer implements IObserver {
 		if (parseada.get(9).length() > 0)
 		    altura = Double.parseDouble(parseada.get(9));
 		
-		int huso = 30; // No hay que complicarse calculando desde la hora UTC, el profe nos ha dicho que podemos hacerlo así
+		int huso = 30; // No hay que complicarse calculando desde la hora UTC, el profe nos ha dicho que podemos hacerlo asÃ­
 		
 		double[] resultado = calculosSiguientes(longitud, latitud, altura, oesteEste, norteSur, huso);
 		
 		System.out.println("UTM Norte: " + resultado[1] + "\nUTM Este : " + resultado[0]);
 		
-		double ajuste = 0.5/60; // TEMP TO-DO QUÍTALO
+		double ajuste = 0.5/60; // Ajuste del problema de coordenadas a ojÃ­metro, hicimos un pequeÃ±o error de medio segundo en latitud, esto lo corrije
 		if (this.primeraVez) {
 			this.primeraVez = false;
 			establecimientoCoordIniciales(338.067, "W", 4023.550, "N", 337.300, "W", 4023.033,"N", ajuste, 0.0, this.huso, this.huso);
@@ -376,25 +372,19 @@ public class Observer implements IObserver {
 		
 	}
 	
-	public void test() { // Esto es para pruebas de cálculos según el ejemplo de errata, debería salir lo mismo
-		// Tomo el dato, y lo parseo
-		// Luego ajusto con fórmulas
-		String cadena = miSujeto.get(0).getMensaje();
+	public void test() { // Esto es para pruebas de cÃ¡lculos
+		String cadena = misSujetos.get(0).getMensaje();
 		System.out.println("Cadena GPS: " + cadena);
 		
-		// Acá queda bien filtrarlo, separarlos por comas, solo nos interesan tramas $GPGGA de momento
-		
-		// De lo filtrado sacamos esto
 		String oesteEste = "W";
 		String norteSur = "N";
 		
-		//double longitud = longitudaGrados(337.619); // Lo de la práctica 1, el ejemplo, se ve que funciona
+		//double longitud = longitudaGrados(337.619); // Lo de la prÃ¡ctica 1, el ejemplo, se ve que funciona
 		//double latitud = latitudaGrados(4023.429); 
 		
-		//double longitud = longitudaGrados(337.7013); // Lo de la práctica 1, el ejemplo, se ve que funciona
+		//double longitud = longitudaGrados(337.7013); // Lo de la prÃ¡ctica 1, otro ejemplo, se ve que funciona
 		//double latitud = latitudaGrados(4023.3004);
-		double ajuste = 0.5/60; // El ajuste es porque España se ve desde el plano ecuatorial y hace que algunas lectura en el eje norte se vean descompesadas casi medio segundo, además de que las coordenadas del mapa se hicieron un poco a ojímetro
-		//double ajuste = 0.0;
+		double ajuste = 0.5/60; // El ajuste es porque la lectura se hizo a ojÃ­metro
 
 		double longitud = longitudaGrados(337.9666666); // Coordenadas punto rojo de INSIA
 		double latitud = latitudaGrados(4023.16666667);
@@ -409,10 +399,6 @@ public class Observer implements IObserver {
 		double[] resultado = calculosSiguientes(longitud, latitud, altura, oesteEste, norteSur, huso);
 		
 		System.out.println("UTM Norte: " + resultado[1] + "\nUTM Este : " + resultado[0]);
-		
-		//this.canvas = new MyCanvas();
-		//this.canvas.setImageName("ImagenINSIA.PNG");
-		//this.canvas.setImageName("ImagenUPMeINSIA.PNG");
 
 		JFrame f = new JFrame("Practica 2: Sistema de Geolocalizacion UPM-INSIA");
 		f.add(this.canvas);
@@ -431,37 +417,7 @@ public class Observer implements IObserver {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		 
-		// Según la foto comenzamos en 40º 23' 33'' N 3º 38' 04 '' W, o sea, 4023,55 N y 338,067 W
-		// Y terminamos en 40º 23' 02'' N 3º 37' 18 '' W, o sea, 4023,033 N y 337,300 W
-		
-		// Para el INSIA son 40º 23' 15'' N, 3º 38' 1'' W -> 4023.25 N, 338.0166666666666 W
-		// 40º 23' 08'' N, 3º 37' 50'' W -> 4023.1333333333 N, 337.8333333333 W
-		//if (this.primeraVez) {
-		//	this.primeraVez = false;
-			
-			//establecimientoCoordIniciales(338.0166666666666, "W", 4023.25, "N", 337.8333333333, "W", 4023.1333333333,"N", ajuste, 0.0, 30, 30);
-		//	establecimientoCoordIniciales(338.067, "W", 4023.550, "N", 337.300, "W", 4023.033,"N", ajuste, 0.0, 30, 30);
-			
-			/*
-			System.out.println("COORD INICIALES");
-			//double[] coordIniciales = this.coordenadasInicialesCanvas(338.067, "W", 4023.550, "N");
-			double[] coordIniciales = this.coordenadasInicialesCanvas(338.0166666666666, "W", 4023.25-ajuste, "N");
-			this.coordInicialesEste = coordIniciales[0];
-			this.coordInicialesNorte = coordIniciales[1];
-			System.out.println("COORD FINALES");
-			//double[] coordFinales = this.coordenadasInicialesCanvas(337.300, "W", 4023.033, "N");
-			double[] coordFinales = this.coordenadasInicialesCanvas(337.8333333333, "W", 4023.1333333333-ajuste, "N");
-			this.coordFinalesEste = coordFinales[0];
-			this.coordFinalesNorte = coordFinales[1];
-			double[] DifDeInicialAFinal = {coordFinales[0] -coordIniciales[0], -(coordFinales[1] -coordIniciales[1])}; // Este, Norte
-			this.diferenciaEste = DifDeInicialAFinal[0];
-			this.diferenciaNorte = DifDeInicialAFinal[1];
-			*/
-			
-		//}
-		
+		}		
 
 		double[] diferenciaDeCoordenadas = {resultado[0] -this.coordInicialesEste, resultado[1] -this.coordInicialesNorte}; // Este, Norte
 		
@@ -474,14 +430,8 @@ public class Observer implements IObserver {
 	}
 	
 
-	// Según la foto comenzamos en 40º 23' 33'' N 3º 38' 04 '' W
-	public double[] coordenadasInicialesCanvas(double longitudOrig, String oesteEste, double latitudOrig, String norteSur, int mismoHuso) { // Esto es para pruebas de cálculos según el ejemplo de errata, debería salir lo mismo
-
-		// Según la foto comenzamos en 40º 23' 33'' N 3º 38' 04 '' W
-
-		//String oesteEste = "W";
-		//String norteSur = "N";
-		
+	// Segï¿½n la foto comenzamos en 40ï¿½ 23' 33'' N 3ï¿½ 38' 04 '' W
+	public double[] coordenadasInicialesCanvas(double longitudOrig, String oesteEste, double latitudOrig, String norteSur, int mismoHuso) {
 		
 		double longitud = longitudaGrados(longitudOrig); 
 		double latitud = latitudaGrados(latitudOrig);
