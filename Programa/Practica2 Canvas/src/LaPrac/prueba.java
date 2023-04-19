@@ -26,13 +26,14 @@ public class prueba {
 		Observer calculadora = new Observer(losPuertos, 30, "GPS", m);
 		
 		// Mapa UPM
-		double ajuste = 0.25/60.0;
-		calculadora.getCanvas().setImageName("ImagenUPMeINSIA.PNG");
-		calculadora.establecimientoCoordIniciales(338.067, "W", 4023.550, "N", 337.300, "W", 4023.033,"N", ajuste, 0.0, 30, 30);
+		//double ajuste = 0.25/60.0;
+		//calculadora.getCanvas().setImageName("ImagenUPMeINSIA.PNG");
+		//calculadora.establecimientoCoordIniciales(338.067, "W", 4023.550, "N", 337.300, "W", 4023.033,"N", ajuste, 0.0, 30, 30);
 		// Mapa INSIA
-		//double ajuste = 0.5/60.0;
-		//calculadora.getCanvas().setImageName("ImagenINSIA.PNG");
-		//calculadora.establecimientoCoordIniciales(338.0166666666666, "W", 4023.25, "N", 337.8333333333, "W", 4023.1333333333,"N", ajuste, 0.0, 30, 30);
+		double ajuste = 1.0/60.0;
+		calculadora.getCanvas().setImageName("ImagenINSIA.PNG");
+		calculadora.establecimientoCoordIniciales(338.0166666666666 + 1.0/60.0, "W", 4023.25, "N", 337.8333333333, "W", 4023.1333333333,"N", ajuste,  0.0, 30, 30);
+		calculadora.setPrimeraVez(false);
 		losPuertos.start();
 		
 	}

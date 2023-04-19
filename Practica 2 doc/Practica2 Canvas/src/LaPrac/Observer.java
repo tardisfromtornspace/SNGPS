@@ -317,12 +317,12 @@ public class Observer implements IObserver {
 		this.setAjusteErrorLatitud(ajusteLatitud);
 		this.setAjusteErrorLongitud(ajusteLongitud);
 		System.out.println("COORD INICIALES");
-		double[] coordIniciales = this.coordenadasInicialesCanvas(longitudInicial, esteOesteInicial, latitudInicial+ajusteErrorLatitud, norteSurInicial+ajusteLongitud, husoInicial);
+		double[] coordIniciales = this.coordenadasInicialesCanvas(longitudInicial, esteOesteInicial, latitudInicial+ajusteErrorLatitud, norteSurInicial+ajusteErrorLongitud, husoInicial);
 		this.coordInicialesEste = coordIniciales[0];
 		this.coordInicialesNorte = coordIniciales[1];
 		this.huso1 = husoInicial;
 		System.out.println("COORD FINALES");
-		double[] coordFinales = this.coordenadasInicialesCanvas(longitudFinal, esteOesteFinal, latitudFinal+ajusteErrorLatitud, norteSurFinal+ajusteLongitud, husoFinal);
+		double[] coordFinales = this.coordenadasInicialesCanvas(longitudFinal, esteOesteFinal, latitudFinal+ajusteErrorLatitud, norteSurFinal+ajusteErrorLongitud, husoFinal);
 		this.coordFinalesEste = coordFinales[0];
 		this.coordFinalesNorte = coordFinales[1];
 		this.huso2 = husoFinal;
@@ -352,8 +352,8 @@ public class Observer implements IObserver {
 		//double latitud = latitudaGrados(4023.3004);
 		double ajuste = 0.5/60; // El ajuste es porque España se ve desde el plano ecuatorial y hace que algunas lectura en el eje norte se vean descompesadas casi medio segundo, además de que las coordenadas del mapa se hicieron un poco a ojímetro
 		//double ajuste = 0.0;
-		double longitud = longitudaGrados(337.9666666); // Coordenadas punto rojo de INSIA
-		double latitud = latitudaGrados(4023.16666667);
+		double longitud = longitudaGrados(337.9079); // Coordenadas punto rojo de INSIA
+		double latitud = latitudaGrados(4023.2553);
 		
 		
 		System.out.println("LongGrad: " + longitud + " LatGrad " + latitud);
@@ -473,13 +473,13 @@ public class Observer implements IObserver {
 		
 		
 		// Mapa UPM
-		double ajuste = 0.25/60.0;
-		calculadora.getCanvas().setImageName("ImagenUPMeINSIA.PNG");
-		calculadora.establecimientoCoordIniciales(338.067, "W", 4023.550, "N", 337.300, "W", 4023.033,"N", ajuste, 0.0, 30, 30);
+		//double ajuste = 0.25/60.0;
+		//calculadora.getCanvas().setImageName("ImagenUPMeINSIA.PNG");
+		//calculadora.establecimientoCoordIniciales(338.067, "W", 4023.550, "N", 337.300, "W", 4023.033,"N", ajuste, 0.0, 30, 30);
 		// Mapa INSIA
-		//double ajuste = 0.5/60.0;
-		//calculadora.getCanvas().setImageName("ImagenINSIA.PNG");
-		//calculadora.establecimientoCoordIniciales(338.0166666666666, "W", 4023.25, "N", 337.8333333333, "W", 4023.1333333333,"N", ajuste, 0.0, 30, 30);
+		double ajuste = 0.5/60.0;
+		calculadora.getCanvas().setImageName("ImagenINSIA.PNG");
+		calculadora.establecimientoCoordIniciales(338.0166666666666, "W", 4023.25, "N", 337.8333333333, "W", 4023.1333333333,"N", 1.0/60.0, -60.0/60.0, 30, 30);
 		
 		calculadora.test();
 
