@@ -119,7 +119,7 @@ public class MyCanvas /*extends Canvas*/ implements WindowListener{
 	}
 
 	public double resolucionMapa() {
-		return (156543.04  * Math.cos(latitudGrados) / (Math.pow(2, this.zoomLevel) ))* (1/1.1); // Según BingMaps * ajuste
+		return (156543.04  * Math.cos(latitudGrados) / (Math.pow(2, this.zoomLevel) ))* (1/1.19); // Según BingMaps * ajuste
 		// Objetivo: sabiendo la resolucion, si movemos el mapa arriba debe moverlo adecuadamente
 	}
 
@@ -223,9 +223,8 @@ public class MyCanvas /*extends Canvas*/ implements WindowListener{
 		
 		
 		if(this.mapa[1][1] == null && this.primeraVez == false) { // Si la imagen central no está o no nos han mandado pintar antes, pues la cargamos
-
 			try {
-				//System.out.println("CARGANDO COORDENADAS");
+				System.out.println("CARGANDO COORDENADAS");
 				
 				//this.mapa[1][1] = t.getImage(new URL("https://dev.virtualearth.net/REST/v1/Imagery/Map/Aerial/40.3866,-3.6319?mapSize=1900,1900&zoomlevel=18&key=AlG9KnK2iGsV9RmAXQVPnHvmIyz3m8jeLoe3SgwFRB5NY5uFnH2G5vbeubzEsBYt"));
 				// La de abajo aprece funcionar, pero si pongo el zoom como parámetro se rompe
@@ -246,8 +245,6 @@ public class MyCanvas /*extends Canvas*/ implements WindowListener{
 					e.printStackTrace();
 				}
 			    pixelMetro = resolucionMapa();
-		} else {
-			System.out.println("EL CENTRAL NO ES NULL");
 		}
 		
 		//System.out.println("Mi desplazamiento es"+(desplazamiento[0] * pixelMetro));
@@ -280,7 +277,6 @@ public class MyCanvas /*extends Canvas*/ implements WindowListener{
 
         if (this.mapa[1][1] != null && this.mapa[1][1].getWidth(null) != -1) { // Si la imagen está apropiadamente cargada
         	g2d.drawImage(this.mapa[1][1], atB2, null);
-        	//g.drawImage(this.mapa[1][1], (int)(this.desplazamiento[1]/pixelMetro -this.anchoAlto/2), (int)(-this.desplazamiento[0]/pixelMetro -this.anchoAlto/2), null);
         }
         
 		// Flecha
@@ -288,7 +284,7 @@ public class MyCanvas /*extends Canvas*/ implements WindowListener{
 		Image img = t.getImage("pointIII.png");
         
         AffineTransform at = AffineTransform.getTranslateInstance(0, 0);
-        at.translate(this.anchoAlto / 2 +40, this.anchoAlto / 2 + 20);
+        at.translate(this.anchoAlto / 2 + 40, this.anchoAlto / 2 + 20);
 		at.rotate(this.angulo,img.getWidth(null) / 2, img.getHeight(null) / 2);
 		
 		g2d.drawImage(img, at, null);
